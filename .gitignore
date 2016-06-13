@@ -2,7 +2,7 @@
 /themes/Main
 /locale/Untranslated
 /images/logo
-.idea/.name
+.idea/*
 *.xml
 /infusions/marketplace
 /infusions/hadc
