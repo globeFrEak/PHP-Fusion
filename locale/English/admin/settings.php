@@ -50,6 +50,10 @@ $locale['461'] = "Guests";
 $locale['462'] = "Server offset";
 $locale['463'] = "Set this so server time is GMT 0";
 $locale['464'] = "Default timezone";
+$locale['502'] = "On";
+$locale['503'] = "Off";
+$locale['518'] = "Yes";
+$locale['519'] = "No";
 // Registration Settings
 $locale['550'] = "Registration";
 $locale['551'] = "Enable registration system?";
@@ -59,6 +63,11 @@ $locale['557'] = "New members activated by admin?";
 $locale['558'] = "Enable terms of agreement?";
 $locale['559'] = "Terms of Agreement";
 // Other Settings
+$locale['601'] = "Thumb size:";
+$locale['602'] = "Photo size:";
+$locale['603'] = "Maximum photo size:";
+$locale['604'] = "Width x Height";
+$locale['605'] = "Maximum file size (bytes):";
 $locale['650'] = "Miscellaneous";
 $locale['651'] = "Bad words list:";
 $locale['652'] = "Enter one word per line.";

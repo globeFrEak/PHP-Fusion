@@ -84,7 +84,6 @@ if (isset($_POST['step']) && $_POST['step'] == "2") {
 
 	$check_arr = array(
 		"administration/db_backups" => false,
-		"ftp_upload" => false,
 		"images" => false,
 		"images/imagelist.js" => false,
 		"images/articles" => false,
@@ -1044,12 +1043,12 @@ if (isset($_POST['step']) && $_POST['step'] == "6") {
 			$result = dbquery(
 				"INSERT INTO ".$db_prefix."users (
 					user_name, user_algo, user_salt, user_password, user_admin_algo, user_admin_salt, user_admin_password, user_email, user_hide_email, user_offset,
-					user_avatar, user_posts, user_threads, user_joined, user_lastvisit, user_ip, user_rights,
+					user_avatar, user_joined, user_lastvisit, user_ip, user_rights,
 					user_groups, user_level, user_status, user_theme, user_location, user_birthdate, user_aim,
 					user_icq, user_msn, user_yahoo, user_web, user_sig
 				) VALUES (
 					'".$username."', 'sha256', '".$userSalt."', '".$userPassword."', 'sha256', '".$adminSalt."', '".$adminPassword."',
-					'".$email."', '1', '0', '',  '0', '', '".time()."', '0', '0.0.0.0',
+					'".$email."', '1', '0', '', '".time()."', '0', '0.0.0.0',
 					'A.AC.AD.APWR.B.BB.C.CP.DB.ERRO.IM.I.IP.M.N.NC.P.PI.PO.ROB.SL.S1.S2.S4.S6.S7.S8.S9.S10.S12.SB.SM.SU.UF.UFC.UG.UL.U',
 					'', '103', '0', 'Default', '', '0000-00-00', '', '', '', '', '', ''
 				)"
