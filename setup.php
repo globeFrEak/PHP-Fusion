@@ -987,34 +987,6 @@ if (isset($_POST['step']) && $_POST['step'] == "4") {
 
 							if (!$result) { $fail = true; }
 
-							$result = dbquery("DROP TABLE IF EXISTS ".$db_prefix."weblink_cats");
-							$result = dbquery("CREATE TABLE ".$db_prefix."weblink_cats (
-							weblink_cat_id MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
-							weblink_cat_name VARCHAR(100) NOT NULL DEFAULT '',
-							weblink_cat_description TEXT NOT NULL,
-							weblink_cat_sorting VARCHAR(50) NOT NULL DEFAULT 'weblink_name ASC',
-							weblink_cat_access TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
-							PRIMARY KEY(weblink_cat_id)
-							) ENGINE=MYISAM;");
-
-							if (!$result) { $fail = true; }
-
-							$result = dbquery("DROP TABLE IF EXISTS ".$db_prefix."weblinks");
-							$result = dbquery("CREATE TABLE ".$db_prefix."weblinks (
-							weblink_id MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
-							weblink_name VARCHAR(100) NOT NULL DEFAULT '',
-							weblink_description TEXT NOT NULL,
-							weblink_url VARCHAR(200) NOT NULL DEFAULT '',
-							weblink_cat MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
-							weblink_datestamp INT(10) UNSIGNED NOT NULL DEFAULT '0',
-							weblink_count SMALLINT(5) UNSIGNED NOT NULL DEFAULT '0',
-							PRIMARY KEY(weblink_id),
-							KEY weblink_datestamp (weblink_datestamp),
-							KEY weblink_count (weblink_count)
-							) ENGINE=MYISAM;");
-
-							if (!$result) { $fail = true; }
-
 							if (!$fail) {
 								echo "<br />\n".$locale['040']."<br /><br />\n";
 								echo $locale['041']."<br /><br />\n";
@@ -1351,8 +1323,6 @@ if (isset($_POST['step']) && $_POST['step'] == "6") {
 			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('SU', 'submissions.gif', '".$locale['106']."', 'submissions.php', '2')");
 			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('U', 'upgrade.gif', '".$locale['107']."', 'upgrade.php', '3')");
 			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('UG', 'user_groups.gif', '".$locale['108']."', 'user_groups.php', '2')");
-			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('WC', 'wl_cats.gif', '".$locale['109']."', 'weblink_cats.php', '1')");
-			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('W', 'wl.gif', '".$locale['110']."', 'weblinks.php', '1')");
 			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('S1', 'settings.gif', '".$locale['111']."', 'settings_main.php', '4')");
 			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('S2', 'settings_time.gif', '".$locale['112']."', 'settings_time.php', '4')");
 			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('S3', 'settings_forum.gif', '".$locale['113']."', 'settings_forum.php', '4')");
@@ -1379,7 +1349,7 @@ if (isset($_POST['step']) && $_POST['step'] == "6") {
 				) VALUES (
 					'".$username."', 'sha256', '".$userSalt."', '".$userPassword."', 'sha256', '".$adminSalt."', '".$adminPassword."',
 					'".$email."', '1', '0', '',  '0', '', '".time()."', '0', '0.0.0.0',
-					'A.AC.AD.APWR.B.BB.C.CP.DB.DC.D.ERRO.FQ.F.FR.IM.I.IP.M.N.NC.P.PH.PI.PO.ROB.SL.S1.S2.S3.S4.S5.S6.S7.S8.S9.S10.S11.S12.SB.SM.SU.UF.UFC.UG.UL.U.W.WC',
+					'A.AC.AD.APWR.B.BB.C.CP.DB.DC.D.ERRO.FQ.F.FR.IM.I.IP.M.N.NC.P.PH.PI.PO.ROB.SL.S1.S2.S3.S4.S5.S6.S7.S8.S9.S10.S11.S12.SB.SM.SU.UF.UFC.UG.UL.U',
 					'', '103', '0', 'Default', '', '0000-00-00', '', '', '', '', '', ''
 				)"
 			);
