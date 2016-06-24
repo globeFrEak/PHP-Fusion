@@ -171,88 +171,6 @@ if ($_GET['stype'] == "n") {
 		}
 		closetable();
 	}
-} elseif ($_GET['stype'] == "p") {
-	if (isset($_POST['submit_photo'])) {
-		require_once INCLUDES."photo_functions_include.php";
-		$error = "";
-		$submit_info['photo_title'] = stripinput($_POST['photo_title']);
-		$submit_info['photo_description'] = stripinput($_POST['photo_description']);
-		$submit_info['album_id'] = isnum($_POST['album_id']) ? $_POST['album_id'] : "0";
-		if (is_uploaded_file($_FILES['photo_pic_file']['tmp_name'])) {
-			$photo_types = array(".gif",".jpg",".jpeg",".png");
-			$photo_pic = $_FILES['photo_pic_file'];
-			$photo_name = stripfilename(strtolower(substr($photo_pic['name'], 0, strrpos($photo_pic['name'], "."))));
-			$photo_ext = strtolower(strrchr($photo_pic['name'],"."));
-			$photo_dest = PHOTOS."submissions/";
-			if (!preg_match("/^[-0-9A-Z_\[\]]+$/i", $photo_name)) {
-				$error = 1;
-			} elseif ($photo_pic['size'] > $settings['photo_max_b']){
-				$error = 2;
-			} elseif (!in_array($photo_ext, $photo_types)) {
-				$error = 3;
-			} else {
-				$photo_file = image_exists($photo_dest, $photo_name.$photo_ext);
-				move_uploaded_file($photo_pic['tmp_name'], $photo_dest.$photo_file);
-				chmod($photo_dest.$photo_file, 0644);
-				$imagefile = @getimagesize($photo_dest.$photo_file);
-				if (!verify_image($photo_dest.$photo_file)) {
-					$error = 3;
-					unlink($photo_dest.$photo_file);
-				} elseif ($imagefile[0] > $settings['photo_max_w'] || $imagefile[1] > $settings['photo_max_h']) {
-					$error = 4;
-					unlink($photo_dest.$photo_file);
-				} else {
-					$submit_info['photo_file'] = $photo_file;
-				}
-			}
-		}
-		add_to_title($locale['global_200'].$locale['570']);
-		opentable($locale['570']);
-		if (!$error) {
-			$result = dbquery("INSERT INTO ".DB_SUBMISSIONS." (submit_type, submit_user, submit_datestamp, submit_criteria) VALUES ('p', '".$userdata['user_id']."', '".time()."', '".addslashes(serialize($submit_info))."')");
-			echo "<div style='text-align:center'><br />\n".$locale['580']."<br /><br />\n";
-			echo "<a href='submit.php?stype=p'>".$locale['581']."</a><br /><br />\n";
-			echo "<a href='index.php'>".$locale['412']."</a><br /><br />\n</div>\n";
-		} else {
-			echo "<div style='text-align:center'><br />\n".$locale['600']."<br /><br />\n";
-			if ($error == 1) { echo $locale['601']; }
-			elseif ($error == 2) { echo sprintf($locale['602'], $settings['photo_max_b']); }
-			elseif ($error == 3) { echo $locale['603']; }
-			elseif ($error == 4) { echo sprintf($locale['604'], $settings['photo_max_w'], $settings['photo_max_h']); }
-			echo "<br /><br />\n<a href='submit.php?stype=p'>".$locale['581']."</a><br /><br />\n</div>\n";
-		}
-		closetable();
-	} else {
-		$opts = "";
-		add_to_title($locale['global_200'].$locale['570']);
-		opentable($locale['570']);
-		$result = dbquery("SELECT album_id, album_title FROM ".DB_PHOTO_ALBUMS." WHERE ".groupaccess("album_access")." ORDER BY album_title");
-		if (dbrows($result)) {
-			while ($data = dbarray($result)) $opts .= "<option value='".$data['album_id']."'>".$data['album_title']."</option>\n";
-			echo "<div class='submission-guidelines'>".$locale['620']."</div>\n";
-			echo "<form name='submit_form' method='post' action='".FUSION_SELF."?stype=p' enctype='multipart/form-data' onsubmit='return validatePhoto(this);'>\n";
-			echo "<table cellpadding='0' cellspacing='0' class='center'>\n<tr>\n";
-			echo "<td class='tbl'>".$locale['621']."<span style='color:#ff0000'>*</span></td>\n";
-			echo "<td class='tbl'><input type='text' name='photo_title' maxlength='100' class='textbox' style='width:250px;' /></td>\n";
-			echo "</tr>\n<tr>\n";
-			echo "<td valign='top' class='tbl'>".$locale['622']."<span style='color:#ff0000'>*</span></td>\n";
-			echo "<td class='tbl'><textarea name='photo_description' cols='60' rows='5' class='textbox' style='width:300px;'></textarea></td>\n";
-			echo "</tr>\n<tr>\n";
-			echo "<td valign='top' class='tbl'>".$locale['623']."<span style='color:#ff0000'>*</span></td>\n";
-			echo "<td class='tbl'><label><input type='file' name='photo_pic_file' class='textbox' style='width:250px;' /><br />\n";
-			echo "<span class='small2'>".sprintf($locale['624'], parsebytesize($settings['photo_max_b']), $settings['photo_max_w'], $settings['photo_max_h'])."</span></label></td>\n";
-			echo "</tr>\n<tr>\n";
-			echo "<td class='tbl'>".$locale['625']."</td>\n";
-			echo "<td class='tbl'><select name='album_id' class='textbox'>\n$opts</select></td>\n";
-			echo "</tr>\n<tr>\n";
-			echo "<td align='center' colspan='2' class='tbl'><br />\n";
-			echo "<input type='submit' name='submit_photo' value='".$locale['626']."' class='button' />\n</td>\n";
-			echo "</tr>\n</table>\n</form>\n";
-		} else {
-			echo "<div style='text-align:center'><br />\n".$locale['552']."<br /><br />\n</div>\n";
-		}
-		closetable();
-	}
 } else {
 	redirect("index.php");
 }
@@ -268,12 +186,6 @@ $submit_js .=  "}";
 /************ articles **/
 $submit_js .=  "function validateArticle(frm){";
 $submit_js .=    'if(frm.article_subject.value=="" || frm.article_snippet.value=="" || frm.article_body.value==""){';
-$submit_js .=      'alert("'.$locale['550'].'"); return false;';
-$submit_js .=    "}";
-$submit_js .=  "}";
-/************ photos ****/
-$submit_js .=  "function validatePhoto(frm){";
-$submit_js .=    'if(frm.photo_title.value=="" || frm.photo_description.value=="" || frm.photo_pic_file.value==""){';
 $submit_js .=      'alert("'.$locale['550'].'"); return false;';
 $submit_js .=    "}";
 $submit_js .=  "}";
