@@ -46,6 +46,9 @@ fabric.properties
 # PHP-Fusion related
 ###
 
+# Config
+config.php
+
 # Themes
 /themes/*
 !/themes/templates
@@ -76,4 +79,3 @@ fabric.properties
 # Upload
 /ftp_upload/*
 !/ftp_upload/index.php
-
