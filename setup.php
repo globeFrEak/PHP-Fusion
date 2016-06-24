@@ -380,27 +380,6 @@ if (isset($_POST['step']) && $_POST['step'] == "4") {
 
 							if (!$result) { $fail = true; }
 
-							$result = dbquery("DROP TABLE IF EXISTS ".$db_prefix."faq_cats");
-							$result = dbquery("CREATE TABLE ".$db_prefix."faq_cats (
-							faq_cat_id MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
-							faq_cat_name VARCHAR(200) NOT NULL DEFAULT '',
-							faq_cat_description VARCHAR(250) NOT NULL DEFAULT '',
-							PRIMARY KEY(faq_cat_id)
-							) ENGINE=MYISAM;");
-
-							if (!$result) { $fail = true; }
-
-							$result = dbquery("DROP TABLE IF EXISTS ".$db_prefix."faqs");
-							$result = dbquery("CREATE TABLE ".$db_prefix."faqs (
-							faq_id MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
-							faq_cat_id MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
-							faq_question VARCHAR(200) NOT NULL DEFAULT '',
-							faq_answer TEXT NOT NULL,
-							PRIMARY KEY(faq_id)
-							) ENGINE=MYISAM;");
-
-							if (!$result) { $fail = true; }
-
 							$result = dbquery("DROP TABLE IF EXISTS ".$db_prefix."flood_control");
 							$result = dbquery("CREATE TABLE ".$db_prefix."flood_control (
 							flood_ip VARCHAR(45) NOT NULL DEFAULT '',
@@ -1250,7 +1229,6 @@ if (isset($_POST['step']) && $_POST['step'] == "6") {
 			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('CP', 'c-pages.gif', '".$locale['087']."', 'custom_pages.php', '1')");
 			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('DB', 'db_backup.gif', '".$locale['088']."', 'db_backup.php', '3')");
 			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('ERRO', 'errors.gif', '".$locale['129']."', 'errors.php', '3')");
-			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('FQ', 'faq.gif', '".$locale['091']."', 'faq.php', '1')");
 			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('F', 'forums.gif', '".$locale['092']."', 'forums.php', '1')");
 			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('IM', 'images.gif', '".$locale['093']."', 'images.php', '1')");
 			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('I', 'infusions.gif', '".$locale['094']."', 'infusions.php', '3')");
@@ -1294,7 +1272,7 @@ if (isset($_POST['step']) && $_POST['step'] == "6") {
 				) VALUES (
 					'".$username."', 'sha256', '".$userSalt."', '".$userPassword."', 'sha256', '".$adminSalt."', '".$adminPassword."',
 					'".$email."', '1', '0', '',  '0', '', '".time()."', '0', '0.0.0.0',
-					'A.AC.AD.APWR.B.BB.C.CP.DB.ERRO.FQ.F.FR.IM.I.IP.M.N.NC.P.PH.PI.PO.ROB.SL.S1.S2.S3.S4.S5.S6.S7.S8.S9.S10.S11.S12.SB.SM.SU.UF.UFC.UG.UL.U',
+					'A.AC.AD.APWR.B.BB.C.CP.DB.ERRO.F.FR.IM.I.IP.M.N.NC.P.PH.PI.PO.ROB.SL.S1.S2.S3.S4.S5.S6.S7.S8.S9.S10.S11.S12.SB.SM.SU.UF.UFC.UG.UL.U',
 					'', '103', '0', 'Default', '', '0000-00-00', '', '', '', '', '', ''
 				)"
 			);
@@ -1350,7 +1328,6 @@ if (isset($_POST['step']) && $_POST['step'] == "6") {
 
 			$result = dbquery("INSERT INTO ".$db_prefix."site_links (link_name, link_url, link_visibility, link_position, link_window, link_order) VALUES ('".$locale['130']."', 'index.php', '0', '2', '0', '1')");
 			$result = dbquery("INSERT INTO ".$db_prefix."site_links (link_name, link_url, link_visibility, link_position, link_window, link_order) VALUES ('".$locale['131']."', 'articles.php', '0', '2', '0', '2')");
-			$result = dbquery("INSERT INTO ".$db_prefix."site_links (link_name, link_url, link_visibility, link_position, link_window, link_order) VALUES ('".$locale['133']."', 'faq.php', '0', '1', '0', '4')");
 			$result = dbquery("INSERT INTO ".$db_prefix."site_links (link_name, link_url, link_visibility, link_position, link_window, link_order) VALUES ('".$locale['134']."', 'forum/index.php', '0', '2', '0', '5')");
 			$result = dbquery("INSERT INTO ".$db_prefix."site_links (link_name, link_url, link_visibility, link_position, link_window, link_order) VALUES ('".$locale['136']."', 'news_cats.php', '0', '2', '0', '7')");
 			$result = dbquery("INSERT INTO ".$db_prefix."site_links (link_name, link_url, link_visibility, link_position, link_window, link_order) VALUES ('".$locale['135']."', 'contact.php', '0', '1', '0', '8')");

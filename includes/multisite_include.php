@@ -28,8 +28,6 @@ define("DB_COMMENTS", DB_PREFIX."comments");
 define("DB_CUSTOM_PAGES", DB_PREFIX."custom_pages");
 define("DB_EMAIL_VERIFY", DB_PREFIX."email_verify");
 define("DB_ERRORS", DB_PREFIX."errors");
-define("DB_FAQ_CATS", DB_PREFIX."faq_cats");
-define("DB_FAQS", DB_PREFIX."faqs");
 define("DB_FLOOD_CONTROL", DB_PREFIX."flood_control");
 define("DB_FORUM_ATTACHMENTS", DB_PREFIX."forum_attachments");
 define("DB_FORUM_POLL_OPTIONS", DB_PREFIX."forum_poll_options");
