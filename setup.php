@@ -85,10 +85,6 @@ if (isset($_POST['step']) && $_POST['step'] == "2") {
 	$check_arr = array(
 		"administration/db_backups" => false,
 		"forum/attachments" => false,
-		"downloads" => false,
-		"downloads/images" => false,
-		"downloads/submissions/" => false,
-		"downloads/submissions/images" => false,
 		"ftp_upload" => false,
 		"images" => false,
 		"images/imagelist.js" => false,
@@ -362,46 +358,6 @@ if (isset($_POST['step']) && $_POST['step'] == "4") {
 							page_allow_comments TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
 							page_allow_ratings TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
 							PRIMARY KEY (page_id)
-							) ENGINE=MYISAM;");
-
-							if (!$result) { $fail = true; }
-
-							$result = dbquery("DROP TABLE IF EXISTS ".$db_prefix."download_cats");
-							$result = dbquery("CREATE TABLE ".$db_prefix."download_cats (
-							download_cat_id MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
-							download_cat_name VARCHAR(100) NOT NULL DEFAULT '',
-							download_cat_description TEXT NOT NULL,
-							download_cat_sorting VARCHAR(50) NOT NULL DEFAULT 'download_title ASC',
-							download_cat_access TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
-							PRIMARY KEY (download_cat_id)
-							) ENGINE=MYISAM;");
-
-							if (!$result) { $fail = true; }
-
-							$result = dbquery("DROP TABLE IF EXISTS ".$db_prefix."downloads");
-							$result = dbquery("CREATE TABLE ".$db_prefix."downloads (
-							download_id MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
-							download_user MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
-							download_homepage VARCHAR(100) NOT NULL DEFAULT '',
-							download_title VARCHAR(100) NOT NULL DEFAULT '',
-							download_description_short VARCHAR(255) NOT NULL,
-							download_description TEXT NOT NULL,
-							download_image VARCHAR(100) NOT NULL DEFAULT '',
-							download_image_thumb VARCHAR(100) NOT NULL DEFAULT '',
-							download_url VARCHAR(200) NOT NULL DEFAULT '',
-							download_file VARCHAR(100) NOT NULL DEFAULT '',
-							download_cat MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
-							download_license VARCHAR(50) NOT NULL DEFAULT '',
-							download_copyright VARCHAR(250) NOT NULL DEFAULT '',
-							download_os VARCHAR(50) NOT NULL DEFAULT '',
-							download_version VARCHAR(20) NOT NULL DEFAULT '',
-							download_filesize VARCHAR(20) NOT NULL DEFAULT '',
-							download_datestamp INT(10) UNSIGNED NOT NULL DEFAULT '0',
-							download_count INT(10) UNSIGNED NOT NULL DEFAULT '0',
-							download_allow_comments TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
-							download_allow_ratings TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
-							PRIMARY KEY (download_id),
-							KEY download_datestamp (download_datestamp)
 							) ENGINE=MYISAM;");
 
 							if (!$result) { $fail = true; }
@@ -1252,10 +1208,7 @@ if (isset($_POST['step']) && $_POST['step'] == "6") {
 			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('version', '7.02.07')");
 			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('maintenance', '0')");
 			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('maintenance_message', '')");
-			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('download_max_b', '512000')");
-			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('download_types', '.pdf,.gif,.jpg,.png,.zip,.rar,.tar,.bz2,.7z')");
 			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('articles_per_page', '15')");
-			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('downloads_per_page', '15')");
 			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('links_per_page', '15')");
 			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('comments_per_page', '10')");
 			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('comments_sorting', 'ASC')");
@@ -1280,15 +1233,9 @@ if (isset($_POST['step']) && $_POST['step'] == "6") {
 			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('password_algorithm', 'sha256')");
 			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('default_timezone', 'Europe/London')");
 			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('userNameChange', '1')");
-			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('download_screen_max_b', '150000')");
-			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('download_screen_max_w', '1024')");
-			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('download_screen_max_h', '768')");
 			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('recaptcha_public', '')");
 			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('recaptcha_private', '')");
 			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('recaptcha_theme', 'red')");
-			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('download_screenshot', '1')");
-			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('download_thumb_max_w', '100')");
-			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('download_thumb_max_h', '100')");
 			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('multiple_logins', '0')");
 			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('smtp_auth', '0')"); //new in v7.02.05
 			
@@ -1302,8 +1249,6 @@ if (isset($_POST['step']) && $_POST['step'] == "6") {
 			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('C', '', '".$locale['086']."', 'reserved', '2')");
 			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('CP', 'c-pages.gif', '".$locale['087']."', 'custom_pages.php', '1')");
 			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('DB', 'db_backup.gif', '".$locale['088']."', 'db_backup.php', '3')");
-			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('DC', 'dl_cats.gif', '".$locale['089']."', 'download_cats.php', '1')");
-			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('D', 'dl.gif', '".$locale['090']."', 'downloads.php', '1')");
 			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('ERRO', 'errors.gif', '".$locale['129']."', 'errors.php', '3')");
 			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('FQ', 'faq.gif', '".$locale['091']."', 'faq.php', '1')");
 			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('F', 'forums.gif', '".$locale['092']."', 'forums.php', '1')");
@@ -1349,7 +1294,7 @@ if (isset($_POST['step']) && $_POST['step'] == "6") {
 				) VALUES (
 					'".$username."', 'sha256', '".$userSalt."', '".$userPassword."', 'sha256', '".$adminSalt."', '".$adminPassword."',
 					'".$email."', '1', '0', '',  '0', '', '".time()."', '0', '0.0.0.0',
-					'A.AC.AD.APWR.B.BB.C.CP.DB.DC.D.ERRO.FQ.F.FR.IM.I.IP.M.N.NC.P.PH.PI.PO.ROB.SL.S1.S2.S3.S4.S5.S6.S7.S8.S9.S10.S11.S12.SB.SM.SU.UF.UFC.UG.UL.U',
+					'A.AC.AD.APWR.B.BB.C.CP.DB.ERRO.FQ.F.FR.IM.I.IP.M.N.NC.P.PH.PI.PO.ROB.SL.S1.S2.S3.S4.S5.S6.S7.S8.S9.S10.S11.S12.SB.SM.SU.UF.UFC.UG.UL.U',
 					'', '103', '0', 'Default', '', '0000-00-00', '', '', '', '', '', ''
 				)"
 			);
@@ -1379,7 +1324,6 @@ if (isset($_POST['step']) && $_POST['step'] == "6") {
 			$result = dbquery("INSERT INTO ".$db_prefix."smileys (smiley_code, smiley_image, smiley_text) VALUES (':@', 'angry.gif', '".$locale['218']."')");
 
 			$result = dbquery("INSERT INTO ".$db_prefix."news_cats (news_cat_name, news_cat_image) VALUES ('".$locale['180']."', 'bugs.gif')");
-			$result = dbquery("INSERT INTO ".$db_prefix."news_cats (news_cat_name, news_cat_image) VALUES ('".$locale['181']."', 'downloads.gif')");
 			$result = dbquery("INSERT INTO ".$db_prefix."news_cats (news_cat_name, news_cat_image) VALUES ('".$locale['182']."', 'games.gif')");
 			$result = dbquery("INSERT INTO ".$db_prefix."news_cats (news_cat_name, news_cat_image) VALUES ('".$locale['183']."', 'graphics.gif')");
 			$result = dbquery("INSERT INTO ".$db_prefix."news_cats (news_cat_name, news_cat_image) VALUES ('".$locale['184']."', 'hardware.gif')");
@@ -1406,11 +1350,9 @@ if (isset($_POST['step']) && $_POST['step'] == "6") {
 
 			$result = dbquery("INSERT INTO ".$db_prefix."site_links (link_name, link_url, link_visibility, link_position, link_window, link_order) VALUES ('".$locale['130']."', 'index.php', '0', '2', '0', '1')");
 			$result = dbquery("INSERT INTO ".$db_prefix."site_links (link_name, link_url, link_visibility, link_position, link_window, link_order) VALUES ('".$locale['131']."', 'articles.php', '0', '2', '0', '2')");
-			$result = dbquery("INSERT INTO ".$db_prefix."site_links (link_name, link_url, link_visibility, link_position, link_window, link_order) VALUES ('".$locale['132']."', 'downloads.php', '0', '2', '0', '3')");
 			$result = dbquery("INSERT INTO ".$db_prefix."site_links (link_name, link_url, link_visibility, link_position, link_window, link_order) VALUES ('".$locale['133']."', 'faq.php', '0', '1', '0', '4')");
 			$result = dbquery("INSERT INTO ".$db_prefix."site_links (link_name, link_url, link_visibility, link_position, link_window, link_order) VALUES ('".$locale['134']."', 'forum/index.php', '0', '2', '0', '5')");
 			$result = dbquery("INSERT INTO ".$db_prefix."site_links (link_name, link_url, link_visibility, link_position, link_window, link_order) VALUES ('".$locale['136']."', 'news_cats.php', '0', '2', '0', '7')");
-			$result = dbquery("INSERT INTO ".$db_prefix."site_links (link_name, link_url, link_visibility, link_position, link_window, link_order) VALUES ('".$locale['137']."', 'weblinks.php', '0', '2', '0', '6')");
 			$result = dbquery("INSERT INTO ".$db_prefix."site_links (link_name, link_url, link_visibility, link_position, link_window, link_order) VALUES ('".$locale['135']."', 'contact.php', '0', '1', '0', '8')");
 			$result = dbquery("INSERT INTO ".$db_prefix."site_links (link_name, link_url, link_visibility, link_position, link_window, link_order) VALUES ('".$locale['138']."', 'photogallery.php', '0', '1', '0', '9')");
 			$result = dbquery("INSERT INTO ".$db_prefix."site_links (link_name, link_url, link_visibility, link_position, link_window, link_order) VALUES ('".$locale['139']."', 'search.php', '0', '1', '0', '10')");

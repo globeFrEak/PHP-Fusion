@@ -26,8 +26,6 @@ define("DB_BLACKLIST", DB_PREFIX."blacklist");
 define("DB_CAPTCHA", DB_PREFIX."captcha");
 define("DB_COMMENTS", DB_PREFIX."comments");
 define("DB_CUSTOM_PAGES", DB_PREFIX."custom_pages");
-define("DB_DOWNLOAD_CATS", DB_PREFIX."download_cats");
-define("DB_DOWNLOADS", DB_PREFIX."downloads");
 define("DB_EMAIL_VERIFY", DB_PREFIX."email_verify");
 define("DB_ERRORS", DB_PREFIX."errors");
 define("DB_FAQ_CATS", DB_PREFIX."faq_cats");
@@ -66,6 +64,4 @@ define("DB_USER_FIELDS", DB_PREFIX."user_fields");
 define("DB_USER_GROUPS", DB_PREFIX."user_groups");
 define("DB_USER_LOG", DB_PREFIX."user_log");
 define("DB_USERS", DB_PREFIX."users");
-define("DB_WEBLINK_CATS", DB_PREFIX."weblink_cats");
-define("DB_WEBLINKS", DB_PREFIX."weblinks");
 ?>
