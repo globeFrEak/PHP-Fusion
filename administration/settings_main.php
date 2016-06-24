@@ -136,14 +136,6 @@ if (isset($_POST['savesettings'])) {
 		if (!$result) { $error = 1; }
 		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['207']."' WHERE admin_link='db_backup.php'");
 		if (!$result) { $error = 1; }
-		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['208']."' WHERE admin_link='download_cats.php'");
-		if (!$result) { $error = 1; }
-		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['209']."' WHERE admin_link='downloads.php'");
-		if (!$result) { $error = 1; }
-		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['210']."' WHERE admin_link='faq.php'");
-		if (!$result) { $error = 1; }
-		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['211']."' WHERE admin_link='forums.php'");
-		if (!$result) { $error = 1; }
 		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['212']."' WHERE admin_link='images.php'");
 		if (!$result) { $error = 1; }
 		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['213']."' WHERE admin_link='infusions.php'");
@@ -155,8 +147,6 @@ if (isset($_POST['savesettings'])) {
 		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['235']."' WHERE admin_link='news_cats.php'");
 		if (!$result) { $error = 1; }
 		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['217']."' WHERE admin_link='panels.php'");
-		if (!$result) { $error = 1; }
-		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['218']."' WHERE admin_link='photoalbums.php'");
 		if (!$result) { $error = 1; }
 		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['219']."' WHERE admin_link='phpinfo.php'");
 		if (!$result) { $error = 1; }
@@ -170,19 +160,11 @@ if (isset($_POST['savesettings'])) {
 		if (!$result) { $error = 1; }
 		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['225']."' WHERE admin_link='user_groups.php'");
 		if (!$result) { $error = 1; }
-		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['226']."' WHERE admin_link='weblink_cats.php'");
-		if (!$result) { $error = 1; }
-		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['227']."' WHERE admin_link='weblinks.php'");
-		if (!$result) { $error = 1; }
 		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['228']."' WHERE admin_link='settings_main.php'");
 		if (!$result) { $error = 1; }
 		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['229']."' WHERE admin_link='settings_time.php'");
 		if (!$result) { $error = 1; }
-		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['230']."' WHERE admin_link='settings_forum.php'");
-		if (!$result) { $error = 1; }
 		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['231']."' WHERE admin_link='settings_registration.php'");
-		if (!$result) { $error = 1; }
-		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['232']."' WHERE admin_link='settings_photo.php'");
 		if (!$result) { $error = 1; }
 		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['233']."' WHERE admin_link='settings_misc.php'");
 		if (!$result) { $error = 1; }
@@ -192,13 +174,9 @@ if (isset($_POST['savesettings'])) {
 		if (!$result) { $error = 1; }
 		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['238']."' WHERE admin_link='user_fields.php'");
 		if (!$result) { $error = 1; }
-		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['239']."' WHERE admin_link='forum_ranks.php'");
-		if (!$result) { $error = 1; }
 		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['240']."' WHERE admin_link='user_field_cats.php'");
 		if (!$result) { $error = 1; }
 		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['241']."' WHERE admin_link='settings_news.php'");
-		if (!$result) { $error = 1; }
-		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['243']."' WHERE admin_link='settings_dl.php'");
 		if (!$result) { $error = 1; }
 		$result = dbquery("UPDATE ".DB_ADMIN." SET admin_title='".$locale['244']."' WHERE admin_link='settings_ipp.php'");
 		if (!$result) { $error = 1; }

@@ -34,8 +34,6 @@ $locale['status5'] = "Canceled";
 $locale['status6'] = "Anonymous";
 $locale['status7'] = "Deactivated";
 $locale['status8'] = "Inactive";
-// Forum Moderator Level(s)
-$locale['userf1'] = "Moderator";
 // Navigation
 $locale['global_001'] = "Navigation";
 $locale['global_002'] = "No links defined\n";
@@ -47,44 +45,14 @@ $locale['global_013'] = "No Members Online";
 $locale['global_014'] = "Total Members";
 $locale['global_015'] = "Unactivated Members";
 $locale['global_016'] = "Newest Member";
-// Forum Side panel
-$locale['global_020'] = "Forum Threads";
-$locale['global_021'] = "Newest Threads";
-$locale['global_022'] = "Hottest Threads";
-$locale['global_023'] = "No Threads created";
 // Comments Side panel
 $locale['global_025'] = "Latest Comments";
 $locale['global_026'] = "No comments available";
 // Articles Side panel
 $locale['global_030'] = "Latest Articles";
 $locale['global_031'] = "No Articles available";
-// Downloads Side panel
-$locale['global_032'] = "Latest Downloads";
-$locale['global_033'] = "No Downloads available";
 // Welcome panel
 $locale['global_035'] = "Welcome";
-// Latest Active Forum Threads panel
-$locale['global_040'] = "Latest Active Forum Threads";
-$locale['global_041'] = "My Recent Threads";
-$locale['global_042'] = "My Recent Posts";
-$locale['global_043'] = "New Posts";
-$locale['global_044'] = "Thread";
-$locale['global_045'] = "Views";
-$locale['global_046'] = "Replies";
-$locale['global_047'] = "Last Post";
-$locale['global_048'] = "Forum";
-$locale['global_049'] = "Posted";
-$locale['global_050'] = "Author";
-$locale['global_051'] = "Poll";
-$locale['global_052'] = "Moved";
-$locale['global_053'] = "You have not started any forum threads yet.";
-$locale['global_054'] = "You have not posted any forum messages yet.";
-$locale['global_055'] = "There are %u new posts in %u different threads since your last visit.";
-$locale['global_056'] = "My Tracked Threads";
-$locale['global_057'] = "Options";
-$locale['global_058'] = "Stop";
-$locale['global_059'] = "You're not tracking any threads.";
-$locale['global_060'] = "Stop tracking this thread?";
 // News & Articles
 $locale['global_070'] = "Posted by ";
 $locale['global_071'] = "on ";
@@ -168,8 +136,6 @@ $locale['global_199'] = "<strong>Warning:</strong> admin password not set, click
 $locale['global_200'] = " - ";
 $locale['global_201'] = ": ";
 $locale['global_202'] = $locale['global_200']."Search";
-$locale['global_203'] = $locale['global_200']."FAQ";
-$locale['global_204'] = $locale['global_200']."Forum";
 //Themes
 $locale['global_210'] = "Skip to content";
 // No themes found
