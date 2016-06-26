@@ -21,7 +21,6 @@ $locale['215'] = "Members";
 $locale['216'] = "News";
 $locale['217'] = "Panels";
 $locale['219'] = "PHP Info";
-$locale['220'] = "Polls";
 $locale['221'] = "";
 $locale['222'] = "Site Links";
 $locale['223'] = "Submissions";

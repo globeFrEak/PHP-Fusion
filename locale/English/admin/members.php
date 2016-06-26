@@ -33,7 +33,6 @@ The following content <u>posted by this user</u> on this site will be deleted if
 - News<br />
 - Comments<br />
 - Private messages sent or received by this user<br />
-- Poll votes<br />
 - Ratings given<br />
 Unless this is a spammer for eg. we recommend you to Ban, Suspend, Cancel or Anomymize this user.<br />
 <br />

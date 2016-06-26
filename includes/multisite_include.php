@@ -37,8 +37,6 @@ define("DB_NEWS", DB_PREFIX."news");
 define("DB_NEWS_CATS", DB_PREFIX."news_cats");
 define("DB_ONLINE", DB_PREFIX."online");
 define("DB_PANELS", DB_PREFIX."panels");
-define("DB_POLL_VOTES", DB_PREFIX."poll_votes");
-define("DB_POLLS", DB_PREFIX."polls");
 define("DB_RATINGS", DB_PREFIX."ratings");
 define("DB_SETTINGS", DB_PREFIX."settings");
 define("DB_SETTINGS_INF", DB_PREFIX."settings_inf");
