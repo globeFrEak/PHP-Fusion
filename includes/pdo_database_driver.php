@@ -8,7 +8,7 @@
   | Filename: pdo_database_driver.php
   | Author: Yodix
   | Co-Author: Joakim Falk (Domi)
-  | Modified: Dennis Vorpahl
+  | Modified: Dennis Vorpahl and Philipp Horna
   +--------------------------------------------------------+
   | This program is released as free software under the
   | Affero GPL license. You can redistribute it and/or
