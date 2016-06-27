@@ -92,20 +92,6 @@ $locale['global_126'] = "message";
 $locale['global_127'] = "messages";
 $locale['global_128'] = "submission";
 $locale['global_129'] = "submissions";
-// Poll
-$locale['global_130'] = "Member Poll";
-$locale['global_131'] = "Submit Vote";
-$locale['global_132'] = "You must login to vote.";
-$locale['global_133'] = "Vote";
-$locale['global_134'] = "Votes";
-$locale['global_135'] = "Votes: ";
-$locale['global_136'] = "Started: ";
-$locale['global_137'] = "Ended: ";
-$locale['global_138'] = "Polls Archive";
-$locale['global_139'] = "Select a Poll to view from the list:";
-$locale['global_140'] = "View";
-$locale['global_141'] = "View Poll";
-$locale['global_142'] = "There are no polls defined.";
 
 // Captcha
 $locale['global_150'] = "Validation Code:";

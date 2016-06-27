@@ -529,39 +529,6 @@ if (isset($_POST['step']) && $_POST['step'] == "4") {
 
 							if (!$result) { $fail = true; }
 
-							$result = dbquery("DROP TABLE IF EXISTS ".$db_prefix."votes");
-							$result = dbquery("DROP TABLE IF EXISTS ".$db_prefix."poll_votes");
-							$result = dbquery("CREATE TABLE ".$db_prefix."poll_votes (
-							vote_id MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
-							vote_user MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
-							vote_opt SMALLINT(2) UNSIGNED NOT NULL DEFAULT '0',
-							poll_id MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
-							PRIMARY KEY (vote_id)
-							) ENGINE=MYISAM;");
-
-							if (!$result) { $fail = true; }
-
-							$result = dbquery("DROP TABLE IF EXISTS ".$db_prefix."polls");
-							$result = dbquery("CREATE TABLE ".$db_prefix."polls (
-							poll_id MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
-							poll_title VARCHAR(200) NOT NULL DEFAULT '',
-							poll_opt_0 VARCHAR(200) NOT NULL DEFAULT '',
-							poll_opt_1 VARCHAR(200) NOT NULL DEFAULT '',
-							poll_opt_2 VARCHAR(200) NOT NULL DEFAULT '',
-							poll_opt_3 VARCHAR(200) NOT NULL DEFAULT '',
-							poll_opt_4 VARCHAR(200) NOT NULL DEFAULT '',
-							poll_opt_5 VARCHAR(200) NOT NULL DEFAULT '',
-							poll_opt_6 VARCHAR(200) NOT NULL DEFAULT '',
-							poll_opt_7 VARCHAR(200) NOT NULL DEFAULT '',
-							poll_opt_8 VARCHAR(200) NOT NULL DEFAULT '',
-							poll_opt_9 VARCHAR(200) NOT NULL DEFAULT '',
-							poll_started INT(10) UNSIGNED NOT NULL DEFAULT '0',
-							poll_ended INT(10) UNSIGNED NOT NULL DEFAULT '0',
-							PRIMARY KEY (poll_id)
-							) ENGINE=MYISAM;");
-
-							if (!$result) { $fail = true; }
-
 							$result = dbquery("DROP TABLE IF EXISTS ".$db_prefix."settings");
 							$result = dbquery("CREATE TABLE ".$db_prefix."settings (
 							settings_name VARCHAR(200) NOT NULL DEFAULT '',
@@ -1021,7 +988,6 @@ if (isset($_POST['step']) && $_POST['step'] == "6") {
 			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('P', 'panels.gif', '".$locale['099']."', 'panels.php', '3')");
 
 			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('PI', 'phpinfo.gif', '".$locale['101']."', 'phpinfo.php', '3')");
-			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('PO', 'polls.gif', '".$locale['102']."', 'polls.php', '1')");
 			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('SL', 'site_links.gif', '".$locale['104']."', 'site_links.php', '3')");
 			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('SM', 'smileys.gif', '".$locale['105']."', 'smileys.php', '3')");
 			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('SU', 'submissions.gif', '".$locale['106']."', 'submissions.php', '2')");
@@ -1049,7 +1015,7 @@ if (isset($_POST['step']) && $_POST['step'] == "6") {
 				) VALUES (
 					'".$username."', 'sha256', '".$userSalt."', '".$userPassword."', 'sha256', '".$adminSalt."', '".$adminPassword."',
 					'".$email."', '1', '0', '', '".time()."', '0', '0.0.0.0',
-					'A.AC.AD.APWR.B.BB.C.CP.DB.ERRO.IM.I.IP.M.N.NC.P.PI.PO.ROB.SL.S1.S2.S4.S6.S7.S8.S9.S10.S12.SB.SM.SU.UF.UFC.UG.UL.U',
+					'A.AC.AD.APWR.B.BB.C.CP.DB.ERRO.IM.I.IP.M.N.NC.P.PI.ROB.SL.S1.S2.S4.S6.S7.S8.S9.S10.S12.SB.SM.SU.UF.UFC.UG.UL.U',
 					'', '103', '0', 'Default', '', '0000-00-00', '', '', '', '', '', ''
 				)"
 			);
@@ -1099,7 +1065,6 @@ if (isset($_POST['step']) && $_POST['step'] == "6") {
 			$result = dbquery("INSERT INTO ".$db_prefix."panels (panel_name, panel_filename, panel_content, panel_side, panel_order, panel_type, panel_access, panel_display, panel_status, panel_url_list) VALUES ('".$locale['163']."', 'latest_articles_panel', '', '1', '4', 'file', '0', '0', '0', '')");
 			$result = dbquery("INSERT INTO ".$db_prefix."panels (panel_name, panel_filename, panel_content, panel_side, panel_order, panel_type, panel_access, panel_display, panel_status, panel_url_list) VALUES ('".$locale['164']."', 'welcome_message_panel', '', '2', '1', 'file', '0', '0', '1', '')");
 			$result = dbquery("INSERT INTO ".$db_prefix."panels (panel_name, panel_filename, panel_content, panel_side, panel_order, panel_type, panel_access, panel_display, panel_status, panel_url_list) VALUES ('".$locale['166']."', 'user_info_panel', '', '4', 1, 'file', '0', '0', '1', '')");
-			$result = dbquery("INSERT INTO ".$db_prefix."panels (panel_name, panel_filename, panel_content, panel_side, panel_order, panel_type, panel_access, panel_display, panel_status, panel_url_list) VALUES ('".$locale['167']."', 'member_poll_panel', '', '4', '2', 'file', '0', '0', '0', '')");
 
 			$result = dbquery("INSERT INTO ".$db_prefix."site_links (link_name, link_url, link_visibility, link_position, link_window, link_order) VALUES ('".$locale['130']."', 'index.php', '0', '2', '0', '1')");
 			$result = dbquery("INSERT INTO ".$db_prefix."site_links (link_name, link_url, link_visibility, link_position, link_window, link_order) VALUES ('".$locale['131']."', 'articles.php', '0', '2', '0', '2')");

@@ -90,7 +90,6 @@ $locale['097'] = "News Categories";
 $locale['098'] = "News";
 $locale['099'] = "Panels";
 $locale['101'] = "PHP Info";
-$locale['102'] = "Polls";
 $locale['103'] = "";
 $locale['104'] = "Site Links";
 $locale['105'] = "Smileys";
@@ -127,7 +126,6 @@ $locale['161'] = "Online Users";
 $locale['163'] = "Latest Articles";
 $locale['164'] = "Welcome Message";
 $locale['166'] = "User Info";
-$locale['167'] = "Members Poll";
 $locale['168'] = "";
 // Stage 6 - News Categories
 $locale['180'] = "Bugs";
