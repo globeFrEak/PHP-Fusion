@@ -123,19 +123,15 @@ define("QUOTES_GPC", (ini_get('magic_quotes_gpc') ? TRUE : FALSE));
 // Path definitions
 define("ADMIN", BASEDIR."administration/");
 define("CLASSES", BASEDIR."includes/classes/");
-define("DOWNLOADS", BASEDIR."downloads/");
 define("IMAGES", BASEDIR."images/");
 define("IMAGES_A", IMAGES."articles/");
 define("IMAGES_N", IMAGES."news/");
 define("IMAGES_N_T", IMAGES."news/thumbs/");
 define("IMAGES_NC", IMAGES."news_cats/");
-define("RANKS", IMAGES."ranks/");
 define("INCLUDES", BASEDIR."includes/");
 define("LOCALE", BASEDIR."locale/");
 define("LOCALESET", $settings['locale']."/");
-define("FORUM", BASEDIR."forum/");
 define("INFUSIONS", BASEDIR."infusions/");
-define("PHOTOS", IMAGES."photoalbum/");
 define("THEMES", BASEDIR."themes/");
 
 // Variables initializing
@@ -144,8 +140,6 @@ $mysql_queries_time = array();
 $smiley_cache = "";
 $bbcode_cache = "";
 $groups_cache = "";
-$forum_rank_cache = "";
-$forum_mod_rank_cache = "";
 $locale = array();
 
 // Calculate current true url
@@ -512,7 +506,7 @@ function parsesmileys($message) {
 	return $message;
 }
 
-// Show smiley icons in comments, forum and other post pages
+// Show smiley icons in comments and other post pages
 function displaysmileys($textarea, $form = "inputform") {
 	global $smiley_cache;
 	$smileys = ""; $i = 0;
@@ -912,7 +906,7 @@ function showdate($format, $val) {
 	} else {
 		$offset = $settings['timeoffset']+$settings['serveroffset'];
 	}
-	if ($format == "shortdate" || $format == "longdate" || $format == "forumdate" || $format == "newsdate") {
+	if ($format == "shortdate" || $format == "longdate" || $format == "newsdate") {
 		return strftime($settings[$format], $val + ($offset * 3600));
 	} else {
 		return strftime($format, $val + ($offset * 3600));
