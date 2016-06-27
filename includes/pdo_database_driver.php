@@ -25,9 +25,12 @@ if (!defined("IN_FUSION")) {
 /**
  * Opens or re-uses a connection to a MySQL server.
  * @param string $db_host The MySQL server. It can also include a port number. e.g. "hostname:port" or a path to a local socket e.g. ":/path/to/socket" for the localhost.
-  If the PHP directive mysql.default_host is undefined (default), then the default value is 'localhost:3306'. In SQL safe mode, this parameter is ignored and value 'localhost:3306' is always used.
- * @param string $db_user The username. Default value is defined by mysql.default_user. In SQL safe mode, this parameter is ignored and the name of the user that owns the server process is used.
- * @param string $db_pass The password. Default value is defined by mysql.default_password. In SQL safe mode, this parameter is ignored and empty password is used.
+ *      If the PHP directive mysql.default_host is undefined (default), then the default value is 'localhost:3306'. 
+ *      In SQL safe mode, this parameter is ignored and value 'localhost:3306' is always used.
+ * @param string $db_user The username. Default value is defined by mysql.default_user. 
+ *      In SQL safe mode, this parameter is ignored and the name of the user that owns the server process is used.
+ * @param string $db_pass The password. Default value is defined by mysql.default_password. 
+ *      In SQL safe mode, this parameter is ignored and empty password is used.
  * @param string $db_name The name of the database that is to be selected.
  * @return mixed Returns a PDO object on success or an Excpetion on failure
  */
@@ -86,7 +89,7 @@ function dbquery_exec($query) {
  * @param string $conditions The conditions you want to the results to match
  * @param array $execute
  * @return mixed This function will return the number of rows in the $table matching the $conditions if any.
-This function will return false if there are no rows or on failure.
+ *      This function will return false if there are no rows or on failure.
  */
 function dbcount($field, $table, $conditions = "", $execute = array()) {
     global $pdo, $mysql_queries_count, $mysql_queries_time;
