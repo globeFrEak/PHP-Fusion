@@ -95,6 +95,14 @@ if (iADMIN  && checkrights("ERRO") && count($_errorHandler) > 0) {
 	echo "<div class='admin-message'>".str_replace("[ERROR_LOG_URL]", ADMIN."errors.php".$aidlink, $locale['err_101'])."</div>\n";
 }
 
+if (isset($settings['bootstrap_js_url']) && $settings['bootstrap_js_url'] != "") {
+    echo "<script type='text/javascript' src='".$settings['bootstrap_js_url']."'";
+    if (isset($settings['bootstrap_js_sri']) && $settings['bootstrap_js_sri'] != "") {
+        echo " integrity='".$settings['bootstrap_js_sri']."' crossorigin='anonymous'";
+    }
+    echo "></script>\n";
+}
+
 echo "</body>\n</html>\n";
 
 $output = ob_get_contents();

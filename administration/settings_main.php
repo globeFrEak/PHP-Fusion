@@ -113,6 +113,22 @@ if (isset($_POST['savesettings'])) {
 	if (!$result) { $error = 1; }
 	$result = dbquery("UPDATE ".DB_SETTINGS." SET settings_value='".stripinput($_POST['exclude_right'])."' WHERE settings_name='exclude_right'");
 	if (!$result) { $error = 1; }
+    $result = dbquery("UPDATE ".DB_SETTINGS." SET settings_value='".stripinput($_POST['jquery_url'])."' WHERE settings_name='jquery_url'");
+    if (!$result) { $error = 1; }
+    $result = dbquery("UPDATE ".DB_SETTINGS." SET settings_value='".stripinput($_POST['jquery_sri'])."' WHERE settings_name='jquery_sri'");
+    if (!$result) { $error = 1; }
+    $result = dbquery("UPDATE ".DB_SETTINGS." SET settings_value='".stripinput($_POST['font_url'])."' WHERE settings_name='font_url'");
+    if (!$result) { $error = 1; }
+    $result = dbquery("UPDATE ".DB_SETTINGS." SET settings_value='".stripinput($_POST['font_sri'])."' WHERE settings_name='font_sri'");
+    if (!$result) { $error = 1; }
+    $result = dbquery("UPDATE ".DB_SETTINGS." SET settings_value='".stripinput($_POST['bootstrap_css_url'])."' WHERE settings_name='bootstrap_css_url'");
+    if (!$result) { $error = 1; }
+    $result = dbquery("UPDATE ".DB_SETTINGS." SET settings_value='".stripinput($_POST['bootstrap_css_sri'])."' WHERE settings_name='bootstrap_css_sri'");
+    if (!$result) { $error = 1; }
+    $result = dbquery("UPDATE ".DB_SETTINGS." SET settings_value='".stripinput($_POST['bootstrap_js_url'])."' WHERE settings_name='bootstrap_js_url'");
+    if (!$result) { $error = 1; }
+    $result = dbquery("UPDATE ".DB_SETTINGS." SET settings_value='".stripinput($_POST['bootstrap_js_sri'])."' WHERE settings_name='bootstrap_js_sri'");
+    if (!$result) { $error = 1; }
 
 	if (($localeset != $old_localeset) && !$error) {
 		include LOCALE.$localeset."/admin/main.php";
@@ -238,6 +254,32 @@ echo "<span id='display_host'>".$settings2['site_host']."</span>";
 echo "<span id='display_port'>".($settings2['site_port'] ? ":".$settings2['site_port'] : "")."</span>";
 echo "<span id='display_path'>".$settings2['site_path']."</span>";
 echo "</td>\n";
+echo "</tr>\n<tr>\n";
+echo "<td class='tbl2' align='center' colspan='2'><strong>".$locale['435']."</strong></td>\n";
+echo "</tr>\n<tr>\n";
+echo "<td width='30%' class='tbl' valign='top'>".$locale['437']."</td>\n";
+echo "<td width='70%' class='tbl' valign='top'><input type='text' id='jquery_url' name='jquery_url' value='".$settings2['jquery_url']."' class='textbox' style='width:230px;' /></td>\n";
+echo "</tr>\n<tr>\n";
+echo "<td width='30%' class='tbl' valign='top'>".$locale['438']."<br /><span class='small2'>".$locale['436']."</a></span></td>\n";
+echo "<td width='70%' class='tbl' valign='top'><input type='text' id='jquery_sri' name='jquery_sri' value='".$settings2['jquery_sri']."' class='textbox' style='width:230px;' /></td>\n";
+echo "</tr>\n<tr>\n";
+echo "<td width='30%' class='tbl' valign='top'>".$locale['439']."</td>\n";
+echo "<td width='70%' class='tbl' valign='top'><input type='text' id='font_url' name='font_url' value='".$settings2['font_url']."' class='textbox' style='width:230px;' /></td>\n";
+echo "</tr>\n<tr>\n";
+echo "<td width='30%' class='tbl' valign='top'>".$locale['440']."<br /><span class='small2'>".$locale['436']."</a></span></td>\n";
+echo "<td width='70%' class='tbl' valign='top'><input type='text' id='font_sri' name='font_sri' value='".$settings2['font_sri']."' class='textbox' style='width:230px;' /></td>\n";
+echo "</tr>\n<tr>\n";
+echo "<td width='30%' class='tbl' valign='top'>".$locale['441']."</td>\n";
+echo "<td width='70%' class='tbl' valign='top'><input type='text' id='bootstrap_css_url' name='bootstrap_css_url' value='".$settings2['bootstrap_css_url']."' class='textbox' style='width:230px;' /></td>\n";
+echo "</tr>\n<tr>\n";
+echo "<td width='30%' class='tbl' valign='top'>".$locale['442']."<br /><span class='small2'>".$locale['436']."</a></span></td>\n";
+echo "<td width='70%' class='tbl' valign='top'><input type='text' id='bootstrap_css_sri' name='bootstrap_css_sri' value='".$settings2['bootstrap_css_sri']."' class='textbox' style='width:230px;' /></td>\n";
+echo "</tr>\n<tr>\n";
+echo "<td width='30%' class='tbl' valign='top'>".$locale['443']."</td>\n";
+echo "<td width='70%' class='tbl' valign='top'><input type='text' id='bootstrap_js_url' name='bootstrap_js_url' value='".$settings2['bootstrap_js_url']."' class='textbox' style='width:230px;' /></td>\n";
+echo "</tr>\n<tr>\n";
+echo "<td width='30%' class='tbl' valign='top'>".$locale['444']."<br /><span class='small2'>".$locale['436']."</a></span></td>\n";
+echo "<td width='70%' class='tbl' valign='top'><input type='text' id='bootstrap_js_sri' name='bootstrap_js_sri' value='".$settings2['bootstrap_js_sri']."' class='textbox' style='width:230px;' /></td>\n";
 echo "</tr>\n<tr>\n";
 echo "<td class='tbl2' align='center' colspan='2'><strong>".$locale['432']."</strong></td>\n";
 echo "</tr>\n<tr>\n";
