@@ -98,7 +98,7 @@ if (checkrights("M")) {
 }
 echo "</td>\n<td valign='top' width='33%' class='small'>
 ".(checkrights("SU") ? "<a href='".ADMIN."submissions.php".$aidlink."#news_submissions'>".$locale['254']."</a>" : $locale['254'])." ".dbcount("(submit_id)", DB_SUBMISSIONS, "submit_type='n'")."<br />
-".(checkrights("SU") ? "<a href='".ADMIN."submissions.php".$aidlink."#article_submissions'>".$locale['255']."</a>" : $locale['255'])." ".dbcount("(submit_id)", DB_SUBMISSIONS, "submit_type='a'")."<br />
+".(checkrights("SU") ? "<a href='".ADMIN."submissions.php".$aidlink."#article_submissions'>".$locale['255']."</a>" : $locale['255'])." ".dbcount("(submit_id)", DB_SUBMISSIONS, "submit_type='a'")."
 </td>\n<td valign='top' width='33%' class='small'>
 ".$locale['257']." ".dbcount("(comment_id)", DB_COMMENTS)."<br />
 </td>\n</tr>\n</table>\n";
