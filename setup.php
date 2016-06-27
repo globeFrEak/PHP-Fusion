@@ -1127,33 +1127,8 @@ echo "<br />";
 
 echo "</body>\n</html>\n";
 
-// mySQL database functions
-function dbconnect($db_host, $db_user, $db_pass, $db_name) {
-	global $db_connect;
-
-	$db_connect = @mysql_connect($db_host, $db_user, $db_pass);
-	$db_select = @mysql_select_db($db_name);
-	if (!$db_connect) {
-		return false;
-	} else {
-		return true;
-	}
-}
-
-function dbquery($query) {
-	$result = @mysql_query($query);
-	if (!$result) {
-		echo mysql_error();
-		return false;
-	} else {
-		return $result;
-	}
-}
-
-function dbrows($query) {
-	$result = @mysql_num_rows($query);
-	return $result;
-}
+// PDO database functions
+require_once __DIR__.'/includes/pdo_database_driver.php';
 
 // Strip Input Function, prevents HTML in unwanted places
 function stripinput($text) {
