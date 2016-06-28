@@ -136,24 +136,24 @@ if (isset($_POST['btn_do_restore'])) {
 	if ((preg_match("/# Database Name: `(.+?)`/i", $result[2], $tmp1)) && (preg_match("/# Table Prefix: `(.+?)`/i", $result[3], $tmp2))) {
 		$restore_tblpre = stripinput($_POST['restore_tblpre']);
 		$inf_dbname = $tmp1[1];
-		$inf_tblpre = $tmp2[1];
-		$result = array_slice($result, 7);
-		$results = preg_split("/;$/m", implode("",$result));
-		if (count($_POST['list_tbl']) > 0) {
+		$inf_tblpre = $tmp2[1];    
+                $result = array_slice($result, 7);
+		$results = preg_split("/;$/m", implode("",$result));      
+                if (count($_POST['list_tbl']) > 0) {
 			foreach ($results as $result){
 				$result = html_entity_decode($result, ENT_QUOTES);
 				if (preg_match("/^DROP TABLE IF EXISTS `(.*?)`/im",$result,$tmp)) {
 					$tbl = $tmp[1];
 					if (in_array($tbl, $_POST['list_tbl'])) {
 						$result = preg_replace("/^DROP TABLE IF EXISTS `$inf_tblpre(.*?)`/im","DROP TABLE IF EXISTS `$restore_tblpre\\1`",$result);
-						mysql_unbuffered_query($result);                                               
+						dbUnbufferedQuery($result);                                               
 					}
 				}
 				if (preg_match("/^CREATE TABLE `(.*?)`/im",$result,$tmp)) {
 					$tbl = $tmp[1];
-					if (in_array($tbl, $_POST['list_tbl'])) {
-						$result = preg_replace("/^CREATE TABLE `$inf_tblpre(.*?)`/im","CREATE TABLE `$restore_tblpre\\1`",$result);
-						mysql_unbuffered_query($result);
+					if (in_array($tbl, $_POST['list_tbl'])) {                                           
+						$result = preg_replace("/^CREATE TABLE `$inf_tblpre(.*?)`/im","CREATE TABLE `$restore_tblpre\\1`",$result);                                                
+						dbUnbufferedQuery($result);
 					}
 				}
 			}
@@ -162,9 +162,10 @@ if (isset($_POST['btn_do_restore'])) {
 			foreach($results as $result){
 				if (preg_match("/INSERT INTO `(.*?)`/i",$result,$tmp)) {
 					$ins = $tmp[1];
-					if (in_array($ins, $_POST['list_ins'])) {
-						$result = preg_replace("/INSERT INTO `$inf_tblpre(.*?)`/i","INSERT INTO `$restore_tblpre\\1`",$result);
-						mysql_unbuffered_query($result);
+					if (in_array($ins, $_POST['list_ins'])) {                                              
+						$result = preg_replace("/INSERT INTO `$inf_tblpre(.*?)`/i","INSERT INTO `$restore_tblpre\\1`",$result); 
+                                                var_dump($result);
+						dbUnbufferedQuery($result);
 					}
 				}
 			}

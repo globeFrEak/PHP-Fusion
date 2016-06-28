@@ -190,4 +190,20 @@ function dbexists($table) {
     }
 }
 
+/**
+ * dbUnbufferedQuery sends an unique unbuffered query to the database.
+ * @param resource $query A SQL query, The query string should not end with a semicolon.
+ * @param array $execute
+ * @return mixed FALSE or an array $result
+ */
+function dbUnbufferedQuery($query, $execute = array()) {
+    global $pdo;
+
+    $pdo->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);
+    $ret = dbquery($query, $execute = array());
+    $pdo->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+
+    return $ret;
+}
+
 ?>
