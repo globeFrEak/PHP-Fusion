@@ -1195,5 +1195,5 @@ function strleft($s1, $s2) {
 	return substr($s1, 0, strpos($s1, $s2));
 }
 
-if (isset($db_connect) && $db_connect != false) { mysql_close($db_connect); }
+if (isset($db_connect) && $db_connect != false) { $db_connect = null; }
 ?>
