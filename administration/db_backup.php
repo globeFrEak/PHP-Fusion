@@ -56,9 +56,10 @@ if (isset($_POST['btn_create_backup'])) {
 			if ($result && dbrows($result)) {
 				echo $crlf."#".$crlf."# Table Data for `".$table."`".$crlf."#".$crlf;
 				$column_list = "";
-				$num_fields= mysql_num_fields($result);
+				$num_fields= $result->columnCount();                                
 				for ($i = 0; $i < $num_fields; $i++) {
-					$column_list .= (($column_list != "") ? ", " : "")."`".mysql_field_name($result, $i)."`";
+                                        $field_name[] = $result->getColumnMeta($i);
+					$column_list .= (($column_list != "") ? ", " : "")."`".$field_name['name']."`";
 				}
 			}
 			while ($row = dbarraynum($result)) {
@@ -68,8 +69,8 @@ if (isset($_POST['btn_create_backup'])) {
 					if (!isset($row[$i])) {
 						$dump .= "NULL";
 					} elseif ($row[$i] == "0" || $row[$i] != ""){
-						$type = mysql_field_type($result, $i);
-						if ($type == "tinyint" || $type == "smallint" || $type == "mediumint" || $type == "int" || $type == "bigint"|| $type == "timestamp") {
+						$field_type[] = $result->getColumnMeta($i);
+						if ($field_type['pdo_type'] == "tinyint" || $field_type['pdo_type'] == "smallint" || $field_type['pdo_type'] == "mediumint" || $field_type['pdo_type'] == "int" || $field_type['pdo_type'] == "bigint"|| $field_type['pdo_type'] == "timestamp") {
 							$dump .= $row[$i];
 						} else {
 							$search_array = array('\\', '\'', "\x00", "\x0a", "\x0d", "\x1a");
@@ -145,7 +146,7 @@ if (isset($_POST['btn_do_restore'])) {
 					$tbl = $tmp[1];
 					if (in_array($tbl, $_POST['list_tbl'])) {
 						$result = preg_replace("/^DROP TABLE IF EXISTS `$inf_tblpre(.*?)`/im","DROP TABLE IF EXISTS `$restore_tblpre\\1`",$result);
-						mysql_unbuffered_query($result);
+						mysql_unbuffered_query($result);                                               
 					}
 				}
 				if (preg_match("/^CREATE TABLE `(.*?)`/im",$result,$tmp)) {
