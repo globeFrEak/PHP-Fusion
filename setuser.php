@@ -19,5 +19,5 @@ require_once "maincore.php";
 
 redirect($settings['opening_page']);
 
-$db_connect = null;
+$pdo = null;
 ?>

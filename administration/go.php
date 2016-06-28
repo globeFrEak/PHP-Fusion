@@ -65,5 +65,5 @@ if (ob_get_length() !== FALSE){
 	ob_end_flush();
 }
 
-$db_connect = null;
+$pdo = null;
 ?>
