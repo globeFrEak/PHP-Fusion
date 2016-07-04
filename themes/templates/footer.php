@@ -115,5 +115,5 @@ if (ob_get_length() !== FALSE){
 	ob_end_flush();
 }
 
-mysql_close($db_connect);
+$pdo = null;
 ?>
