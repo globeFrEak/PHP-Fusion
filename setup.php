@@ -885,220 +885,223 @@ if (isset($_POST['step']) && $_POST['step'] == "5") {
 }
 
 if (isset($_POST['step']) && $_POST['step'] == "6") {
-    require_once "config.php";
-    $db_connect = dbconnect($db_host, $db_user, $db_pass, $db_name);
+	require_once "config.php";
+	$dbconnect = dbconnect($db_host, $db_user, $db_pass, $db_name);
 
-    $error = "";
-    $error_pass = "0";
-    $error_name = "0";
-    $error_mail = "0";
-    $settings['password_algorithm'] = "sha256";
+	$error = ""; $error_pass = "0"; $error_name = "0"; $error_mail = "0"; $settings['password_algorithm'] = "sha256";
 
-    $username = (isset($_POST['username']) ? stripinput(trim($_POST['username'])) : "");
-    if ($username == "") {
-        $error .= $locale['070b'] . "<br /><br />\n";
-        $error_name = "1";
-    } elseif (!preg_match("/^[-0-9A-Z_@\s]+$/i", $username)) {
-        $error .= $locale['070'] . "<br /><br />\n";
-        $error_name = "1";
-    }
+	$username = (isset($_POST['username']) ? stripinput(trim($_POST['username'])) : "");
+	if ($username == "") {
+		$error .= $locale['070b']."<br /><br />\n";
+		$error_name = "1";
+	} elseif (!preg_match("/^[-0-9A-Z_@\s]+$/i", $username)) {
+		$error .= $locale['070']."<br /><br />\n";
+		$error_name = "1";
+	}
 
-    require_once "includes/classes/PasswordAuth.class.php";
+	require_once "includes/classes/PasswordAuth.class.php";
 
-    $userPassword = "";
-    $adminPassword = "";
+	$userPassword = ""; $adminPassword = "";
 
-    $userPass = new PasswordAuth();
-    $userPass->inputNewPassword = (isset($_POST['password1']) ? stripinput(trim($_POST['password1'])) : "");
-    $userPass->inputNewPassword2 = (isset($_POST['password2']) ? stripinput(trim($_POST['password2'])) : "");
-    $returnValue = $userPass->isValidNewPassword();
-    if ($returnValue == 0) {
-        $userPassword = $userPass->getNewHash();
-        $userSalt = $userPass->getNewSalt();
-    } elseif ($returnValue == 2) {
-        $error .= $locale['071'] . "<br /><br />\n";
-        $error_pass = "1";
-    } elseif ($returnValue == 3) {
-        $error .= $locale['072'] . "<br /><br />\n";
-    }
+	$userPass = new PasswordAuth();
+	$userPass->inputNewPassword = (isset($_POST['password1']) ? stripinput(trim($_POST['password1'])) : "");
+	$userPass->inputNewPassword2 = (isset($_POST['password2']) ? stripinput(trim($_POST['password2'])) : "");
+	$returnValue = $userPass->isValidNewPassword();
+	if ($returnValue == 0) {
+		$userPassword = $userPass->getNewHash();
+		$userSalt = $userPass->getNewSalt();
+	} elseif ($returnValue == 2) {
+		$error .= $locale['071']."<br /><br />\n";
+		$error_pass = "1";
+	} elseif ($returnValue == 3) {
+		$error .= $locale['072']."<br /><br />\n";
+	}
 
-    $adminPass = new PasswordAuth();
-    $adminPass->inputNewPassword = (isset($_POST['admin_password1']) ? stripinput(trim($_POST['admin_password1'])) : "");
-    $adminPass->inputNewPassword2 = (isset($_POST['admin_password2']) ? stripinput(trim($_POST['admin_password2'])) : "");
-    $returnValue = $adminPass->isValidNewPassword();
-    if ($returnValue == 0) {
-        $adminPassword = $adminPass->getNewHash();
-        $adminSalt = $adminPass->getNewSalt();
-    } elseif ($returnValue == 2) {
-        $error .= $locale['073'] . "<br /><br />\n";
-        $error_pass = "1";
-    } elseif ($returnValue == 3) {
-        $error .= $locale['075'] . "<br /><br />\n";
-    }
+	$adminPass = new PasswordAuth();
+	$adminPass->inputNewPassword = (isset($_POST['admin_password1']) ? stripinput(trim($_POST['admin_password1'])) : "");
+	$adminPass->inputNewPassword2 = (isset($_POST['admin_password2']) ? stripinput(trim($_POST['admin_password2'])) : "");
+	$returnValue = $adminPass->isValidNewPassword();
+	if ($returnValue == 0) {
+		$adminPassword = $adminPass->getNewHash();
+		$adminSalt = $adminPass->getNewSalt();
+	} elseif ($returnValue == 2) {
+		$error .= $locale['073']."<br /><br />\n";
+		$error_pass = "1";
+	} elseif ($returnValue == 3) {
+		$error .= $locale['075']."<br /><br />\n";
+	}
 
-    if ($userPass->inputNewPassword == $adminPass->inputNewPassword) {
-        $error .= $locale['074'] . "<br /><br />\n";
-        $error_pass = "1";
-    }
+	if ($userPass->inputNewPassword == $adminPass->inputNewPassword) {
+			$error .= $locale['074']."<br /><br />\n";
+			$error_pass = "1";
+	}
 
-    $email = (isset($_POST['email']) ? stripinput(trim($_POST['email'])) : "");
+	$email = (isset($_POST['email']) ? stripinput(trim($_POST['email'])) : "");
 
-    if ($email == "") {
-        $error .= $locale['076b'] . "<br /><br />\n";
-        $error_mail = "1";
-    } elseif (!preg_match("/^[-0-9A-Z_\.]{1,50}@([-0-9A-Z_\.]+\.){1,50}([0-9A-Z]){2,4}$/i", $email)) {
-        $error .= $locale['076'] . "<br /><br />\n";
-        $error_mail = "1";
-    }
+ 	if ($email == "") {
+		$error .= $locale['076b']."<br /><br />\n";
+		$error_mail = "1";
+	} elseif (!preg_match("/^[-0-9A-Z_\.]{1,50}@([-0-9A-Z_\.]+\.){1,50}([0-9A-Z]){2,4}$/i", $email)) {
+		$error .= $locale['076']."<br /><br />\n";
+		$error_mail = "1";
+	}
 
-    $rows = dbrows(dbquery("SELECT user_id FROM " . $db_prefix . "users"));
+	$rows = dbrows(dbquery("SELECT user_id FROM ".$db_prefix."users"));
 
-    if ($error == "") {
-        if ($rows == 0) {
-            $siteurl = getCurrentURL();
-            $url = parse_url($siteurl);
+	if ($error == "") {
+		if ($rows == 0) {
+			$siteurl = getCurrentURL();
+			$url = parse_url($siteurl);
 
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('sitename', 'PHP-Fusion Powered Website')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('siteurl', '" . $siteurl . "')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('site_protocol', '" . $url['scheme'] . "')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('site_host', '" . $url['host'] . "')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('site_port', '" . (isset($url['port']) ? $url['port'] : "") . "')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('site_path', '" . (isset($url['path']) ? $url['path'] : "") . "')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('sitebanner', 'images/php-fusion-logo.png')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('sitebanner1', '')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('sitebanner2', '')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('siteemail', '" . $email . "')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('siteusername', '" . $username . "')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('siteintro', '<div style=\'text-align:center\'>" . $locale['230'] . "</div>')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('description', '')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('keywords', '')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('footer', '<div style=\'text-align:center\'>Copyright &copy; " . @date("Y") . "</div>')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('opening_page', 'news.php')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('news_thumb_ratio', '0')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('news_image_link', '0')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('news_thumb_w', '100')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('news_thumb_h', '100')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('news_photo_max_w', '1800')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('news_photo_max_h', '1600')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('news_photo_max_b', '150000')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('locale', '" . stripinput($_POST['localeset']) . "')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('theme', 'Gillette')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('default_search', 'all')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('exclude_left', '')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('exclude_upper', '')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('exclude_lower', '')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('exclude_right', '')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('shortdate', '" . $locale['shortdate'] . "')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('longdate', '" . $locale['longdate'] . "')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('newsdate', '" . $locale['newsdate'] . "')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('subheaderdate', '" . $locale['subheaderdate'] . "')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('timeoffset', '0.0')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('serveroffset', '0.0')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('enable_registration', '1')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('email_verification', '1')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('admin_activation', '0')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('display_validation', '1')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('enable_deactivation', '0')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('deactivation_period', '365')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('deactivation_response', '14')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('enable_terms', '0')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('license_agreement', '')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('license_lastupdate', '0')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('thumb_w', '100')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('thumb_h', '100')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('thumb_compression', 'gd2')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('thumbs_per_row', '4')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('thumbs_per_page', '12')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('tinymce_enabled', '0')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('smtp_host', '')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('smtp_port', '25')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('smtp_username', '')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('smtp_password', '')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('bad_words_enabled', '1')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('bad_words', '')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('bad_word_replace', '****')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('guestposts', '0')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('comments_enabled', '1')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('ratings_enabled', '1')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('hide_userprofiles', '0')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('userthemes', '1')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('newsperpage', '11')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('flood_interval', '15')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('counter', '0')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('version', '7.02.07')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('maintenance', '0')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('maintenance_message', '')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('articles_per_page', '15')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('links_per_page', '15')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('comments_per_page', '10')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('comments_sorting', 'ASC')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('comments_avatar', '1')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('avatar_width', '100')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('avatar_height', '100')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('avatar_filesize', '15000')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('avatar_ratio', '0')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('cronjob_day', '" . time() . "')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('cronjob_hour', '" . time() . "')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('flood_autoban', '1')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('visitorcounter_enabled', '1')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('rendertime_enabled', '0')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('popular_threads_timeframe', '')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('maintenance_level', '102')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('news_photo_w', '400')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('news_photo_h', '300')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('news_image_frontpage', '0')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('news_image_readmore', '0')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('deactivation_action', '0')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('captcha', 'securimage2')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('password_algorithm', 'sha256')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('default_timezone', 'Europe/London')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('userNameChange', '1')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('recaptcha_public', '')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('recaptcha_private', '')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('recaptcha_theme', 'red')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('multiple_logins', '0')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "settings (settings_name, settings_value) VALUES ('smtp_auth', '0')"); //new in v7.02.05
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('sitename', 'PHP-Fusion Powered Website')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('siteurl', '".$siteurl."')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('site_protocol', '".$url['scheme']."')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('site_host', '".$url['host']."')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('site_port', '".(isset($url['port']) ? $url['port'] : "")."')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('site_path', '".(isset($url['path']) ? $url['path'] : "")."')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('sitebanner', 'images/php-fusion-logo.png')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('sitebanner1', '')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('sitebanner2', '')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('siteemail', '".$email."')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('siteusername', '".$username."')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('siteintro', '<div style=\'text-align:center\'>".$locale['230']."</div>')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('description', '')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('keywords', '')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('footer', '<div style=\'text-align:center\'>Copyright &copy; ".@date("Y")."</div>')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('opening_page', 'news.php')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('news_thumb_ratio', '0')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('news_image_link', '0')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('news_thumb_w', '100')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('news_thumb_h', '100')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('news_photo_max_w', '1800')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('news_photo_max_h', '1600')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('news_photo_max_b', '150000')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('locale', '".stripinput($_POST['localeset'])."')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('theme', 'Gillette')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('default_search', 'all')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('exclude_left', '')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('exclude_upper', '')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('exclude_lower', '')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('exclude_right', '')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('shortdate', '".$locale['shortdate']."')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('longdate', '".$locale['longdate']."')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('newsdate', '".$locale['newsdate']."')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('subheaderdate', '".$locale['subheaderdate']."')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('timeoffset', '0.0')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('serveroffset', '0.0')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('enable_registration', '1')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('email_verification', '1')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('admin_activation', '0')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('display_validation', '1')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('enable_deactivation', '0')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('deactivation_period', '365')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('deactivation_response', '14')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('enable_terms', '0')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('license_agreement', '')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('license_lastupdate', '0')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('thumb_w', '100')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('thumb_h', '100')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('thumb_compression', 'gd2')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('thumbs_per_row', '4')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('thumbs_per_page', '12')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('tinymce_enabled', '0')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('smtp_host', '')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('smtp_port', '25')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('smtp_username', '')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('smtp_password', '')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('bad_words_enabled', '1')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('bad_words', '')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('bad_word_replace', '****')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('guestposts', '0')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('comments_enabled', '1')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('ratings_enabled', '1')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('hide_userprofiles', '0')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('userthemes', '1')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('newsperpage', '11')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('flood_interval', '15')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('counter', '0')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('version', '7.02.07')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('maintenance', '0')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('maintenance_message', '')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('articles_per_page', '15')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('links_per_page', '15')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('comments_per_page', '10')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('comments_sorting', 'ASC')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('comments_avatar', '1')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('avatar_width', '100')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('avatar_height', '100')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('avatar_filesize', '15000')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('avatar_ratio', '0')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('cronjob_day', '".time()."')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('cronjob_hour', '".time()."')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('flood_autoban', '1')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('visitorcounter_enabled', '1')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('rendertime_enabled', '0')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('popular_threads_timeframe', '')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('maintenance_level', '102')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('news_photo_w', '400')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('news_photo_h', '300')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('news_image_frontpage', '0')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('news_image_readmore', '0')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('deactivation_action', '0')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('captcha', 'securimage2')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('password_algorithm', 'sha256')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('default_timezone', 'Europe/London')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('userNameChange', '1')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('recaptcha_public', '')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('recaptcha_private', '')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('recaptcha_theme', 'red')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('multiple_logins', '0')");
+			$result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('smtp_auth', '0')"); //new in v7.02.05
+      $result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('jquery_url', '//code.jquery.com/jquery-1.12.4.min.js')");
+      $result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('jquery_sri', 'sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ')");
+      $result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('font_url', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css')");
+      $result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('font_sri', 'sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1')");
+      $result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('bootstrap_css_url', '//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css')");
+      $result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('bootstrap_css_sri', 'sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7')");
+      $result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('bootstrap_js_url', '//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')");
+      $result = dbquery("INSERT INTO ".$db_prefix."settings (settings_name, settings_value) VALUES ('bootstrap_js_sri', 'sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS')");
 
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('AD', 'admins.gif', '" . $locale['080'] . "', 'administrators.php', '2')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('APWR', 'admin_pass.gif', '" . $locale['128'] . "', 'admin_reset.php', '2')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('AC', 'article_cats.gif', '" . $locale['081'] . "', 'article_cats.php', '1')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('A', 'articles.gif', '" . $locale['082'] . "', 'articles.php', '1')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('SB', 'banners.gif', '" . $locale['083'] . "', 'banners.php', '3')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('BB', 'bbcodes.gif', '" . $locale['084'] . "', 'bbcodes.php', '3')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('B', 'blacklist.gif', '" . $locale['085'] . "', 'blacklist.php', '2')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('C', '', '" . $locale['086'] . "', 'reserved', '2')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('CP', 'c-pages.gif', '" . $locale['087'] . "', 'custom_pages.php', '1')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('DB', 'db_backup.gif', '" . $locale['088'] . "', 'db_backup.php', '3')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('ERRO', 'errors.gif', '" . $locale['129'] . "', 'errors.php', '3')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('IM', 'images.gif', '" . $locale['093'] . "', 'images.php', '1')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('I', 'infusions.gif', '" . $locale['094'] . "', 'infusions.php', '3')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('IP', '', '" . $locale['095'] . "', 'reserved', '3')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('M', 'members.gif', '" . $locale['096'] . "', 'members.php', '2')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('NC', 'news_cats.gif', '" . $locale['097'] . "', 'news_cats.php', '1')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('N', 'news.gif', '" . $locale['098'] . "', 'news.php', '1')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('P', 'panels.gif', '" . $locale['099'] . "', 'panels.php', '3')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('AD', 'admins.gif', '".$locale['080']."', 'administrators.php', '2')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('APWR', 'admin_pass.gif', '".$locale['128']."', 'admin_reset.php', '2')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('AC', 'article_cats.gif', '".$locale['081']."', 'article_cats.php', '1')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('A', 'articles.gif', '".$locale['082']."', 'articles.php', '1')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('SB', 'banners.gif', '".$locale['083']."', 'banners.php', '3')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('BB', 'bbcodes.gif', '".$locale['084']."', 'bbcodes.php', '3')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('B', 'blacklist.gif', '".$locale['085']."', 'blacklist.php', '2')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('C', '', '".$locale['086']."', 'reserved', '2')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('CP', 'c-pages.gif', '".$locale['087']."', 'custom_pages.php', '1')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('DB', 'db_backup.gif', '".$locale['088']."', 'db_backup.php', '3')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('ERRO', 'errors.gif', '".$locale['129']."', 'errors.php', '3')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('IM', 'images.gif', '".$locale['093']."', 'images.php', '1')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('I', 'infusions.gif', '".$locale['094']."', 'infusions.php', '3')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('IP', '', '".$locale['095']."', 'reserved', '3')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('M', 'members.gif', '".$locale['096']."', 'members.php', '2')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('NC', 'news_cats.gif', '".$locale['097']."', 'news_cats.php', '1')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('N', 'news.gif', '".$locale['098']."', 'news.php', '1')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('P', 'panels.gif', '".$locale['099']."', 'panels.php', '3')");
 
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('PI', 'phpinfo.gif', '" . $locale['101'] . "', 'phpinfo.php', '3')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('SL', 'site_links.gif', '" . $locale['104'] . "', 'site_links.php', '3')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('SM', 'smileys.gif', '" . $locale['105'] . "', 'smileys.php', '3')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('SU', 'submissions.gif', '" . $locale['106'] . "', 'submissions.php', '2')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('U', 'upgrade.gif', '" . $locale['107'] . "', 'upgrade.php', '3')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('UG', 'user_groups.gif', '" . $locale['108'] . "', 'user_groups.php', '2')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('S1', 'settings.gif', '" . $locale['111'] . "', 'settings_main.php', '4')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('S2', 'settings_time.gif', '" . $locale['112'] . "', 'settings_time.php', '4')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('S4', 'registration.gif', '" . $locale['114'] . "', 'settings_registration.php', '4')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('S6', 'settings_misc.gif', '" . $locale['116'] . "', 'settings_misc.php', '4')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('S7', 'settings_pm.gif', '" . $locale['117'] . "', 'settings_messages.php', '4')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('S8', 'settings_news.gif', '" . $locale['121'] . "', 'settings_news.php', '4')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('S9', 'settings_users.gif', '" . $locale['122'] . "', 'settings_users.php', '4')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('S10', 'settings_ipp.gif', '" . $locale['124'] . "', 'settings_ipp.php', '4')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('S12', 'security.gif', '" . $locale['125'] . "', 'settings_security.php', '4')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('UF', 'user_fields.gif', '" . $locale['118'] . "', 'user_fields.php', '2')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('UFC', 'user_fields_cats.gif', '" . $locale['120'] . "', 'user_field_cats.php', '2')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('UL', 'user_fields.gif', '" . $locale['129a'] . "', 'user_log.php', '2')");
-            $result = dbquery("INSERT INTO " . $db_prefix . "admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('ROB', 'robots.gif', '" . $locale['129b'] . "', 'robots.php', '3')");
-            $result = dbquery(
-                    "INSERT INTO " . $db_prefix . "users (
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('PI', 'phpinfo.gif', '".$locale['101']."', 'phpinfo.php', '3')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('SL', 'site_links.gif', '".$locale['104']."', 'site_links.php', '3')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('SM', 'smileys.gif', '".$locale['105']."', 'smileys.php', '3')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('SU', 'submissions.gif', '".$locale['106']."', 'submissions.php', '2')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('U', 'upgrade.gif', '".$locale['107']."', 'upgrade.php', '3')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('UG', 'user_groups.gif', '".$locale['108']."', 'user_groups.php', '2')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('S1', 'settings.gif', '".$locale['111']."', 'settings_main.php', '4')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('S2', 'settings_time.gif', '".$locale['112']."', 'settings_time.php', '4')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('S4', 'registration.gif', '".$locale['114']."', 'settings_registration.php', '4')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('S6', 'settings_misc.gif', '".$locale['116']."', 'settings_misc.php', '4')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('S7', 'settings_pm.gif', '".$locale['117']."', 'settings_messages.php', '4')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('S8', 'settings_news.gif', '".$locale['121']."', 'settings_news.php', '4')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('S9', 'settings_users.gif', '".$locale['122']."', 'settings_users.php', '4')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('S10', 'settings_ipp.gif', '".$locale['124']."', 'settings_ipp.php', '4')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('S12', 'security.gif', '".$locale['125']."', 'settings_security.php', '4')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('UF', 'user_fields.gif', '".$locale['118']."', 'user_fields.php', '2')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('UFC', 'user_fields_cats.gif', '".$locale['120']."', 'user_field_cats.php', '2')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('UL', 'user_fields.gif', '".$locale['129a']."', 'user_log.php', '2')");
+			$result = dbquery("INSERT INTO ".$db_prefix."admin (admin_rights, admin_image, admin_title, admin_link, admin_page) VALUES ('ROB', 'robots.gif', '".$locale['129b']."', 'robots.php', '3')");
+			$result = dbquery(
+				"INSERT INTO ".$db_prefix."users (
 					user_name, user_algo, user_salt, user_password, user_admin_algo, user_admin_salt, user_admin_password, user_email, user_hide_email, user_offset,
 					user_avatar, user_joined, user_lastvisit, user_ip, user_rights,
 					user_groups, user_level, user_status, user_theme, user_location, user_birthdate, user_aim,

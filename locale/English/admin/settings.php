@@ -35,6 +35,16 @@ $locale['431'] = "Preview:";
 $locale['432'] = "Other settings";
 $locale['433'] = "mysite.com";
 $locale['434'] = "myfolder";
+$locale['435'] = "Core Ressources";
+$locale['436'] = "Could be generated <a href='https://www.srihash.org/'>here";
+$locale['437'] = "jQuery URL";
+$locale['438'] = "jQuery SRI";
+$locale['439'] = "Font Awesome URL";
+$locale['440'] = "Font Awesome SRI";
+$locale['441'] = "Bootstrap CSS URL";
+$locale['442'] = "Bootstrap CSS SRI";
+$locale['443'] = "Bootstrap JS URL";
+$locale['444'] = "Bootstrap JS SRI";
 // Time & Date Settings
 $locale['450'] = "Time and Date";
 $locale['451'] = "Short date format:";
