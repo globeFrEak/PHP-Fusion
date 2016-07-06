@@ -44,7 +44,7 @@ if (isset($_GET['lookup']) && isnum($_GET['lookup'])) {
 			if (!preg_match("(^\.{$_POST['user_group']}$|\.{$_POST['user_group']}\.|\.{$_POST['user_group']}$)", $user_data['user_groups'])) {
 				$result = dbquery("UPDATE ".DB_USERS." SET user_groups='".$user_data['user_groups'].".".$_POST['user_group']."' WHERE user_id='".$_GET['lookup']."'");
 			}
-			redirect(FUSION_SELF."?lookup=".$user_data['user_id']);
+			redirect(parseLink(FUSION.SELF, FUSION_SELF."?lookup=".$user_data['user_id']));
 		}
 	}
 

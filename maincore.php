@@ -777,7 +777,7 @@ function makepagenav($start, $count, $total, $range = 0, $link = "", $getname = 
 	$res = $locale['global_092']." ".$cur_page.$locale['global_093'].$pg_cnt.": ";
 	if ($idx_back >= 0) {
 		if ($cur_page > ($range + 1)) {
-			$res .= "<a href='".$link.$getname."=0'>1</a>";
+			$res .= "<a href='".parseLink(FUSION_SELF,$link.$getname."=0")."'>1</a>";
 			if ($cur_page != ($range + 2)) {
 				$res .= "...";
 			}
@@ -794,7 +794,8 @@ function makepagenav($start, $count, $total, $range = 0, $link = "", $getname = 
 		if ($i == $cur_page) {
 			$res .= "<span><strong>".$i."</strong></span>";
 		} else {
-			$res .= "<a href='".$link.$getname."=".$offset_page."'>".$i."</a>";
+                    
+			$res .= "<a href='".parseLink(FUSION_SELF,$link.$getname."=".$offset_page)."'>".$i."</a>";
 		}
 	}
 	if ($idx_next < $total) {
@@ -802,7 +803,7 @@ function makepagenav($start, $count, $total, $range = 0, $link = "", $getname = 
 			if ($cur_page != ($pg_cnt - $range - 1)) {
 				$res .= "...";
 			}
-			$res .= "<a href='".$link.$getname."=".($pg_cnt - 1) * $count."'>".$pg_cnt."</a>\n";
+			$res .= "<a href='".parseLink(FUSION_SELF,$link.$getname."=".($pg_cnt - 1) * $count)."'>".$pg_cnt."</a>\n";
 		}
 	}
 
@@ -844,7 +845,7 @@ function profile_link($user_id, $user_name, $user_status, $class = "profile-link
 	$class = ($class ? " class='$class'" : "");
 
 	if ((in_array($user_status, array(0, 3, 7)) || checkrights("M")) && (iMEMBER || $settings['hide_userprofiles'] == "0")) {
-		$link = "<a href='".BASEDIR."profile.php?lookup=".$user_id."'".$class.">".$user_name."</a>";
+		$link = "<a href='".parseLink("profile", BASEDIR."profile.php?lookup=".$user_id)."'".$class.">".$user_name."</a>";
 	} elseif ($user_status == "5" || $user_status == "6") {
 		$link = $locale['user_anonymous'];
 	} else {
@@ -852,6 +853,60 @@ function profile_link($user_id, $user_name, $user_status, $class = "profile-link
 	}
 
 	return $link;
+}
+
+
+//SEF LINKS Start
+/**
+ * Search best rewrite rule and returns there path
+ * @param string $keyword Rewrite Keyword (e.g. news for news.php or foldername from Infusion)
+ * @return mixed Returns rewrite rule path or FALSE
+ */
+function findRewriteLocation($keyword) {
+    // create a list of files in /includes/rewrite
+    $rewriteFolder = makefilelist(INCLUDES . "rewrite", ".|..");
+
+    // create a list of folders in /infusions
+    $infusionsFolder = makefilelist(INFUSIONS, ".|..", true, "folders");
+
+    $locations = array_merge($infusionsFolder, $rewriteFolder);
+
+    // create an array of possible locations
+    $possLocations = array(
+        $keyword . ".php", // /includes/rewrite/
+        $keyword            // /infusions/__NAME__/
+    );
+    // find first location match    
+    foreach ($locations as $location) {
+        if ($location == $possLocations[1] && file_exists(INFUSIONS . $location . "/rewrite.php")) {
+            return INFUSIONS . $possLocations[1] . "/rewrite.php";            
+        }
+
+        if ($location == $possLocations[0]) {
+            return INCLUDES . "rewrite/" . $possLocations[0];
+        }
+    }
+    return FALSE;    
+}
+/**
+ * Translated Link into SEF/SEO Link when rewrite rule exist
+ * @param string $keyword Rewrite keyword or filename.php (e.g. news for news.php or foldername from Infusion)
+ * @param string $originLink Origin link from PHP-Fusion
+ * @return string Returns the translated or non translated link
+ */
+function parseLink($keyword, $originLink) { 
+    $finalLocation = findRewriteLocation(basename($keyword, ".php"));
+    if ($finalLocation == FALSE) {
+        return $originLink;
+    } else {               
+        //split GET Parameter from originLink to $params() array
+        $parts = parse_url($originLink);
+        parse_str($parts['query'], $params);
+        require_once $finalLocation;
+        //load rewrite and translate $params into $seoLink        
+        return $seoLink;
+        
+    }
 }
 
 include INCLUDES."system_images.php";
