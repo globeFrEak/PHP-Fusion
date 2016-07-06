@@ -38,20 +38,27 @@ if (isset($_GET['params'])) {
     }
     // Load site with GET parameters
     header("Location: " . $settings['siteurl'] . "profile.php" . $query);
-} else {
-    // $params is set by function paseLink on maincore.php
-    // 
-    // translate origin Link to SEF/SEO Link
-    // (profile.php?lookup=1 => profile/1) 
-    if (isset($params['lookup'])) {
-        $query = "profile/" . $params['lookup'];
-    }
-    // translate origin Link to SEF/SEO Link
-    // (profile.php?groupid=1 => profile/group/1) 
-    if (isset($params['groupid'])) {
-        $query = "profile/group/" . $params['groupid'];
-    }
-    // $seoLink returns to function paseLink on maincore.php
-    $seoLink = $settings['site_host'] . $settings['site_path'] . $query;
+}
+/* else {   
+  // $params is set by function parseLink on maincore.php
+  //
+  // translate origin Link to SEF/SEO Link
+  // (profile.php?lookup=1 => profile/1)
+  if (isset($paramsSeo['lookup'])) {
+  $querySeo = "profile/" . $paramsSeo['lookup'];
+  }
+  // translate origin Link to SEF/SEO Link
+  // (profile.php?groupid=1 => profile/group/1)
+  if (isset($paramsSeo['groupid'])) {
+  $querySeo = "profile/group/" . $paramsSeo['groupid'];
+  }
+  }
+ * 
+ */
+if (array_key_exists("profile", $rewriteRules) === FALSE) {
+    $rewriteRules["profile"] = array(
+        "lookup" => "profile/",
+        "groupid" => "profile/group/"
+    );
 }
 ?>

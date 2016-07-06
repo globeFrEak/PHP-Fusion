@@ -35,22 +35,31 @@ if (isset($_GET['params'])) {
     if (preg_match($rules['numbers'], $params[1], $matches) && $params[0] === 'row') {
         $query = "?rowstart=" . $matches[0];
     }
-    // Load site with GET parameters
+    // Load site with GET parameters    
     header("Location: " . $settings['siteurl'] . "news.php" . $query);
-} else {
-    // $params is set by function paseLink on maincore.php
-    // 
-    // translate origin Link to SEF/SEO Link
-    // (news.php?readmore=1 => news/1) 
-    if (isset($params['readmore'])) {
-        $query = "news/" . $params['readmore'];
-    }
-    // translate origin Link to SEF/SEO Link
-    // (news.php?rowstart=1 => news/row/1) 
-    if (isset($params['rowstart'])) {
-        $query = "news/row/" . $params['rowstart'];
-    }
-    // $seoLink returns to function parseLink on maincore.php
-    $seoLink = $settings['site_host'] . $settings['site_path'] . $query;
+}
+
+/* else {    
+  // $params is set by function parseLink on maincore.php
+  //
+  // translate origin Link to SEF/SEO Link
+  // (news.php?readmore=1 => news/1)
+  if (isset($paramsSeo['readmore'])) {
+  $querySeo = "news/" . $paramsSeo['readmore'];
+  }
+  // translate origin Link to SEF/SEO Link
+  // (news.php?rowstart=1 => news/row/1)
+  if (isset($paramsSeo['rowstart'])) {
+  $querySeo = "news/row/" . $paramsSeo['rowstart'];
+  }
+  }
+ * 
+ */
+
+if (array_key_exists("news", $rewriteRules) === FALSE) {
+    $rewriteRules["news"] = array(
+        "readmore" => "news/",
+        "rowstart" => "news/row/"
+    );
 }
 ?>

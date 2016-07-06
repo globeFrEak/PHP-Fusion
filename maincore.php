@@ -855,8 +855,8 @@ function profile_link($user_id, $user_name, $user_status, $class = "profile-link
 	return $link;
 }
 
-
 //SEF LINKS Start
+$rewriteRules = array();
 /**
  * Search best rewrite rule and returns there path
  * @param string $keyword Rewrite Keyword (e.g. news for news.php or foldername from Infusion)
@@ -895,17 +895,35 @@ function findRewriteLocation($keyword) {
  * @return string Returns the translated or non translated link
  */
 function parseLink($keyword, $originLink) { 
-    $finalLocation = findRewriteLocation(basename($keyword, ".php"));
+    global $rewriteRules;
+    $keyword = basename($keyword, ".php");
+    $finalLocation = findRewriteLocation($keyword);
     if ($finalLocation == FALSE) {
         return $originLink;
     } else {               
         //split GET Parameter from originLink to $params() array
         $parts = parse_url($originLink);
         parse_str($parts['query'], $params);
-        require_once $finalLocation;
-        //load rewrite and translate $params into $seoLink        
-        return $seoLink;
-        
+        require_once $finalLocation;        
+        //load rewrite and translate $params into $seoLink      
+       
+        if (array_key_exists($keyword, $rewriteRules)){ 
+            $getParam = array_intersect_key($params,$rewriteRules[$keyword]);
+            foreach ($getParam as $key => $value) {
+                $paramKey = $key;
+                $paramValue = $value;
+            }
+            print_r($getParam);
+            $getRules = array_intersect_key($rewriteRules[$keyword], $params);
+            foreach ($getRules as $key => $value) {
+                $rulesKey = $key;
+                $rulesValue = $value;
+            }            
+            print_r($getRules);                    
+            return $rulesValue.$paramValue;
+        } else {
+            return $originLink;
+        } 
     }
 }
 
