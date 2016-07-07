@@ -845,7 +845,7 @@ function profile_link($user_id, $user_name, $user_status, $class = "profile-link
 	$class = ($class ? " class='$class'" : "");
 
 	if ((in_array($user_status, array(0, 3, 7)) || checkrights("M")) && (iMEMBER || $settings['hide_userprofiles'] == "0")) {
-		$link = "<a href='".parseLink("profile", BASEDIR."profile.php?lookup=".$user_id)."'".$class.">".$user_name."</a>";
+		$link = "<a href='".parseLink("profile", BASEDIR."profile.php?lookup=".$user_id."&uname=".$user_name)."'".$class.">".$user_name."</a>";
 	} elseif ($user_status == "5" || $user_status == "6") {
 		$link = $locale['user_anonymous'];
 	} else {
@@ -858,8 +858,8 @@ function profile_link($user_id, $user_name, $user_status, $class = "profile-link
 //SEF LINKS Start
 $rewriteRules = array();
 /**
- * Search best rewrite rule and returns there path
- * @param string $keyword Rewrite Keyword (e.g. news for news.php or foldername from Infusion)
+ * Search best rewrite rule and returns her path
+ * @param string $keyword Rewrite Keyword (e.g. news for news.php or Infusion folder name)
  * @return mixed Returns rewrite rule path or FALSE
  */
 function findRewriteLocation($keyword) {
@@ -903,24 +903,42 @@ function parseLink($keyword, $originLink) {
     } else {               
         //split GET Parameter from originLink to $params() array
         $parts = parse_url($originLink);
+        //splits query (GET parameters) from origin link
         parse_str($parts['query'], $params);
+        //splits fragments (behind #) from origin link
+        //parse_str($parts['fragment'], $fragments);
         require_once $finalLocation;        
         //load rewrite and translate $params into $seoLink      
        
-        if (array_key_exists($keyword, $rewriteRules)){ 
-            $getParam = array_intersect_key($params,$rewriteRules[$keyword]);
-            foreach ($getParam as $key => $value) {
-                $paramKey = $key;
-                $paramValue = $value;
-            }
-            print_r($getParam);
-            $getRules = array_intersect_key($rewriteRules[$keyword], $params);
-            foreach ($getRules as $key => $value) {
-                $rulesKey = $key;
-                $rulesValue = $value;
-            }            
-            print_r($getRules);                    
-            return $rulesValue.$paramValue;
+        if (array_key_exists($keyword, $rewriteRules)){            
+            $getRule = array_intersect_key($rewriteRules[$keyword], $params);
+            $getParam = array_intersect_key($params,$rewriteRules[$keyword]);            
+            if (!empty($getRule) && !empty($getParam)){                
+                if(count($params) == 1){
+                    //for single GET parameter
+                    foreach ($getRule as $key => $value) {                        
+                        $ruleValue = $value;
+                    }
+                    foreach ($getParam as $key => $value) {                        
+                        $paramValue = $value;
+                    }
+                    return $ruleValue.$paramValue;
+                } else { 
+                    //for multiple GET parameter                 
+                    foreach ($getRule as $key => $value) {                        
+                        $ruleValue = $value;
+                    }
+                    $i=0;
+                    $param = array();
+                    foreach ($params as $key => $value) {
+                        $param[$i] = $value;
+                        $i++;                        
+                    }                     
+                    return $ruleValue.implode("/",array_values($param));
+                }
+            } else {
+                return $originLink;
+            }                        
         } else {
             return $originLink;
         } 
