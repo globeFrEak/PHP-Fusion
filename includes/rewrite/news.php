@@ -32,15 +32,14 @@ if (isset($_GET['params'])) {
     // URL: BASDIR/news/1
     if (preg_match($rules['numbers'], $params[0], $matches)) {
         $query = "?readmore=" . $matches[0];
-        $_GET['readmore'] = $matches[0];
-        include_once BASEDIR."news.php";
+        $_GET['readmore'] = $matches[0];        
     }
     // URL: BASDIR/news/row/1
     if (preg_match($rules['numbers'], $params[1], $matches) && $params[0] === 'row') {
         $query = "?rowstart=" . $matches[0];
-        $_GET['rowstart'] = $matches[0];
-        header("Location: " . $settings['siteurl'] . "news.php" . $query);
-    }   
+        $_GET['rowstart'] = $matches[0];        
+    } 
+    include_once BASEDIR."news.php";
 }
 //
 // Rewrite rules for Link creation
