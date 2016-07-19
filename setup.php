@@ -228,7 +228,7 @@ if (isset($_POST['step']) && $_POST['step'] == "4") {
     }
 
     if ($db_host != "" && $db_user != "" && $db_name != "" && $db_prefix != "") {
-        dbconnect($db_host, $db_user, $db_pass, $db_name);
+        dbconnect($db_host, $db_name, $db_user, $db_pass);
         if ($pdo->getAttribute(PDO::ATTR_CONNECTION_STATUS)) {
             if (dbrows(dbquery("SHOW TABLES LIKE '" . str_replace("_", "\_", $db_prefix) . "%'")) == "0") {
                 $table_name = uniqid($db_prefix, false);
