@@ -22,19 +22,18 @@ require_once "maincore.php";
 // GET parameter from .htaccess file
 if (isset($_GET['key']) && $_GET['key'] != "" /* && validateGETVal($_GET['key']) */) {
 
+
     $finalLocation = findRewriteLocation($_GET['key']);
 
-    if ($finalLocation == FALSE) {
+    if (!$finalLocation) {
         // no location found = 404
         header("HTTP/1.0 404 Not Found", "", "404");
         echo "OOOPS - Site not found! (Error 404)</br>";
-
         $db_connect = null;
         exit;
     }
 
-    require_once $finalLocation;
-
+    require_once $finalLocation;   
     $db_connect = null;
     exit;
 }

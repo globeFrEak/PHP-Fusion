@@ -8,8 +8,9 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)/$ /$1 [L,R=301]
 
-    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^([a-zA-Z_0-9\-]+)$ ./index.php?key=$1 [L]
+
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^([a-zA-Z_0-9\-]+)/(.*)$ ./index.php?key=$1&params=$2 [L]
-    RewriteRule ^([a-zA-Z_0-9\-]+)$ ./index.php?key=$1 [L]
 </IfModule>

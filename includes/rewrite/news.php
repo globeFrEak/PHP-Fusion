@@ -21,25 +21,29 @@ if (!defined("IN_FUSION")) {
     die("Access Denied");
 }
 
+if (!isset($settings)) {
+    $settings['newsperpage'] = 10;
+}
+
 $rules = array(
     'numbers' => '#^([0-9]+)$#'
 );
 //
 // Rewrite rule for Link translation
 //
-if (isset($_GET['params'])) {
+if (isset($_GET['params']) && $_GET['key'] == "news") {
     $params = explode('/', $_GET['params']);
     // URL: BASDIR/news/1
     if (preg_match($rules['numbers'], $params[0], $matches)) {
-        $query = "?readmore=" . $matches[0];
-        $_GET['readmore'] = $matches[0];        
+        //$query = "?readmore=" . $matches[0];
+        $_GET['readmore'] = $matches[0];
     }
     // URL: BASDIR/news/row/1
     if (preg_match($rules['numbers'], $params[1], $matches) && $params[0] === 'row') {
-        $query = "?rowstart=" . $matches[0];
-        $_GET['rowstart'] = $matches[0];        
-    } 
-    include_once BASEDIR."news.php";
+        //$query = "?rowstart=" . $matches[0];
+        $_GET['rowstart'] = $matches[0];
+    }
+    require_once BASEDIR . "news.php";
 }
 //
 // Rewrite rules for Link creation
@@ -48,7 +52,7 @@ if (isset($_GET['params'])) {
 // - key for rule are the first GET parameter from url
 // - value are the SEF/SEO url fragment 
 //
-if (array_key_exists("news", $rewriteRules) === FALSE) {
+if (!array_key_exists("news", $rewriteRules)) {
     $rewriteRules["news"] = array(
         "readmore" => "news/",
         "rowstart" => "news/row/"

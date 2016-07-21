@@ -26,19 +26,22 @@ $rules = array(
 //
 // Rewrite rule for Link translation
 //
-if (isset($_GET['params'])) {
+if (isset($_GET['params']) && $_GET['key'] == "profile") {    
     $params = explode('/', $_GET['params']);
+    unset($_GET);
     // URL: BASDIR/profile/1
     if (preg_match($rules['numbers'], $params[0], $matches)) {
-        $query = "?lookup=" . $matches[0];
+        //$query = "?lookup=" . $matches[0];
         $_GET['lookup'] = $matches[0];       
     }
     // URL: BASDIR/profile/group/1
     if (preg_match($rules['numbers'], $params[1], $matches) && $params[0] === 'group') {
-        $query = "?groupid=" . $matches[1];
+        //$query = "?groupid=" . $matches[1];
         $_GET['groupid'] = $matches[0];        
     }  
-    header("Location: " . $settings['siteurl'] . "profile.php" . $query);
+    var_dump($_GET);
+    echo dirname(__DIR__);
+    require_once dirname(__DIR__)."/../profile.php"; 
 }
 //
 // Rewrite rules for Link creation
@@ -47,7 +50,7 @@ if (isset($_GET['params'])) {
 // - key for rule are the first GET parameter from url
 // - value are the SEF/SEO url fragment 
 //
-if (array_key_exists("profile", $rewriteRules) === FALSE) {
+if (!array_key_exists("profile", $rewriteRules)) {
     $rewriteRules["profile"] = array(
         "lookup" => "profile/",
         "groupid" => "profile/group/"

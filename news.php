@@ -16,7 +16,7 @@
 | written permission from the original author(s).
 +--------------------------------------------------------*/
 require_once "maincore.php";
-require_once THEMES."templates/header.php";
+require_once THEMES."templates/header.php"; 
 
 // Predefined variables, do not edit these values
 $i = 0;
@@ -25,8 +25,7 @@ $i = 0;
 $items_per_page = $settings['newsperpage'];
 
 add_to_title($locale['global_200'].$locale['global_077']);
-
-if (!isset($_GET['readmore']) || !isnum($_GET['readmore'])) {
+if (!isset($_GET['readmore']) || !isnum($_GET['readmore'])) {    
 	$rows = dbcount(
 		"(news_id)",
 		DB_NEWS,
@@ -141,7 +140,7 @@ if (!isset($_GET['readmore']) || !isnum($_GET['readmore'])) {
 		}
 		if ($data['news_allow_comments']) { showcomments("N", DB_NEWS, "news_id", $_GET['readmore'], FUSION_SELF."?readmore=".$_GET['readmore']); }
 		if ($data['news_allow_ratings']) { showratings("N", $_GET['readmore'], FUSION_SELF."?readmore=".$_GET['readmore']); }
-	} else {
+	} else {            
 		redirect(FUSION_SELF);
 	}
 }
