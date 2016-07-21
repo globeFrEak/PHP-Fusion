@@ -42,6 +42,31 @@ define("BASEDIR", $folder_level);
 
 require_once BASEDIR."config.php";
 
+// define relative path constant
+$siteurl = getCurrentURL();
+$url = parse_url($siteurl);
+
+$domain = $url['scheme']."://".$url['host'].(isset($url['port']) && $url['port'] != 80 ? ":".$url['port'] : "");
+if($url['path'] != "") {
+    $parts = explode("/", rtrim($url['path'], "/"));
+    $url_ = implode("/", $parts)."/index.php";
+    $c = 0;
+    while(!file_exists($_SERVER['DOCUMENT_ROOT'].$url_)) {
+        if($c > 5) break;
+        array_pop($parts);
+        $url_ = implode("/", $parts)."/index.php";
+        $c++;
+    }
+
+    $domain .= implode("/", $parts);
+}
+
+define('DOMAIN', $domain."/");
+define('FUSION_URL', str_replace($domain."/", "", $siteurl));
+define("REL_PATH", getRelativePath(FUSION_URL, ""));
+
+var_dump(DOMAIN, FUSION_URL, REL_PATH);
+
 // If config.php is empty, activate setup.php script
 if (!isset($db_name)) { redirect("setup.php"); }
 
@@ -852,6 +877,50 @@ function profile_link($user_id, $user_name, $user_status, $class = "profile-link
 	}
 
 	return $link;
+}
+
+// SEF Links
+function getCurrentURL() {
+    $s = empty($_SERVER["HTTPS"]) ? "" : ($_SERVER["HTTPS"] == "on") ? "s" : "";
+    $protocol = strleft(strtolower($_SERVER["SERVER_PROTOCOL"]), "/") . $s;
+    $port = ($_SERVER["SERVER_PORT"] == "80") ? "" : (":" . $_SERVER["SERVER_PORT"]);
+    return $protocol . "://" . $_SERVER['SERVER_NAME'] . $port . (str_replace(basename(cleanurl($_SERVER['PHP_SELF'])), "", $_SERVER['REQUEST_URI']));
+}
+
+function getRelativePath($from, $to) {
+    // some compatibility fixes for Windows paths
+    $from = is_dir($from) ? rtrim($from, '\/') . '/' : $from;
+    $to   = is_dir($to)   ? rtrim($to, '\/') . '/'   : $to;
+    $from = str_replace('\\', '/', $from);
+    $to   = str_replace('\\', '/', $to);
+
+    $from     = explode('/', $from);
+    $to       = explode('/', $to);
+    $relPath  = $to;
+
+    foreach($from as $depth => $dir) {
+        // find first non-matching dir
+        if($dir === $to[$depth]) {
+            // ignore this directory
+            array_shift($relPath);
+        } else {
+            // get number of remaining dirs to $from
+            $remaining = count($from) - $depth;
+            if($remaining > 1) {
+                // add traversals up to first matching dir
+                $padLength = (count($relPath) + $remaining - 1) * -1;
+                $relPath = array_pad($relPath, $padLength, '..');
+                break;
+            } else {
+                $relPath[0] = './' . $relPath[0];
+            }
+        }
+    }
+    return implode('/', $relPath);
+}
+
+function strleft($s1, $s2) {
+    return substr($s1, 0, strpos($s1, $s2));
 }
 
 include INCLUDES."system_images.php";
